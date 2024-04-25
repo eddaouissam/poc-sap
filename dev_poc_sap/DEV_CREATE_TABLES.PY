@@ -36,7 +36,7 @@ def create_tables(session: Session):
         source_table = row['SOURCE_TABLE']
         column_name = row['NAME']
         column_type = row['TYPE']
-        table_name = source_table.replace('_SCHEMA', '')
+        table_name = 'B_'+source_table.replace('_SCHEMA', '')
 
         if current_table != table_name:
             if current_table is not None:
@@ -66,5 +66,5 @@ def create_tables(session: Session):
             errors.append(f"Error creating table {current_table}: {str(e)}")
 
     # Return a message based on whether there were errors
-    return "Errors: " + ", ".join(errors) if errors else "Tables created and data loaded successfully."
+    return "Errors: " + ", ".join(errors) if errors else "Tables created successfully."
 

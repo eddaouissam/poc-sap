@@ -13,23 +13,11 @@ Function:
 
 Usage:
   To use this script, ensure that you have an active Snowpark session configured with appropriate permissions to execute SQL statements and create tables. Call the create_tables function with the session as its argument.
-  Example:
-    from snowflake.snowpark import Session
-    session = Session.builder.configs({
-        "account": "<your_account>.snowflakecomputing.com",
-        "user": "<your_username>",
-        "password": "<your_password>",
-        "role": "<your_role>",
-        "warehouse": "<your_warehouse>",
-        "database": "<your_database>",
-        "schema": "<your_schema>"
-    }).create()
-
-    result = create_tables(session)
-    print(result)
 
 Note:
-  This script is designed for use within a Snowflake environment that supports Python execution through Snowpark. Modifications might be required based on specific database schema details or Snowflake account configurations.
+  This script is designed for use within a Snowflake environment that supports Python execution through Snowpark. 
+  Modifications might be required based on specific database schema details or Snowflake account configurations.
+  This script will be used for our POC, enabling us to create the SAP technical tables structure
 """
 
 from snowflake.snowpark import Session

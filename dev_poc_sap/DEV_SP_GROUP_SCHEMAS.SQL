@@ -43,5 +43,4 @@ END;
 ';
 
 -- Example usage: Calling the procedure to create a table named 'DEV_DB_VISEO.SAP_BRONZE.RAW_SCHEMAS'
--- Note: Replace 'DEV_DB_VISEO.SAP_BRONZE.RAW_SCHEMAS' with the actual table name where you want to store the consolidated schema data.
 CALL DEV_DB_VISEO.SAP_TABLE_SCHEMA.CREATE_GRPD_TABLE_FROM_QUERY('DEV_DB_VISEO.SAP_BRONZE.RAW_SCHEMAS');

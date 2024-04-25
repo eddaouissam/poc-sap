@@ -1,1 +1,1 @@
-# poc_sap
+# **Snowflake SAP Accelerator Framework**

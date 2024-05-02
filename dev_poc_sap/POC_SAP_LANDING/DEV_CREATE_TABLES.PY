@@ -22,7 +22,7 @@ Note:
 
 from snowflake.snowpark import Session
 
-def create_tables(session: Session):
+def create_tables(session):
     errors = []
     current_table = None
     sql_create = ""

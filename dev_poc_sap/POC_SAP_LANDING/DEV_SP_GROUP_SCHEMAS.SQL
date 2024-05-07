@@ -1,5 +1,6 @@
 -- Script: Create Grouped Table from Schema Information
 -- Author: M'hamed Issam ED-DAOU
+-- Version 1.0.0
 -- Description:
 --   This stored procedure dynamically constructs and executes a SQL statement to create a new table
 --   based on aggregated schema information from multiple tables ending in '_SCHEMA'. It is designed to

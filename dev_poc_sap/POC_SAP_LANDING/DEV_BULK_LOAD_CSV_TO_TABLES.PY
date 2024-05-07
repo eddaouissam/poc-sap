@@ -20,7 +20,7 @@ def load_data_automated(session: Session):
     str: A message indicating the overall status of the load operations.
     """
     stage_name = 'DEV_DB_VISEO.SAP_RAW_LANDING.SAP_CSV_FILES'
-    file_format_name = 'DEV_DB_VISEO.SAP_RAW_LANDING.MY_CSV_FORMAT2'
+    file_format_name = 'DEV_DB_VISEO.SAP_RAW_LANDING.FF_CSV_SAP'
     messages = []
 
     # Retrieve all relevant tables

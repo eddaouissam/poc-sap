@@ -3,7 +3,7 @@
 -- Version: 1.0.0
 -- Description:
 --   This script creates a new JSON file format named 'FF_JSON_LOGS' in Snowflake, configured specifically
---   for loading JSON files that describe the schema of SAP tables. The format is set up to handle JSON arrays
+--   for loading JSON files that describe the schema of  SAP tables. The format is set up to handle JSON arrays
 --   by stripping the outer array, enabling direct mapping of JSON objects to table rows. This setup is
 --   particularly useful for ingesting structured JSON that represents table schemas, ensuring efficient and
 --   error-free loading of schema descriptions directly into Snowflake.

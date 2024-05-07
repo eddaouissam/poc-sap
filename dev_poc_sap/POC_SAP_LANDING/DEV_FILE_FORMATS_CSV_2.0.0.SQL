@@ -8,7 +8,7 @@
 --   for our SAP technical tables,
 --   ensuring consistent handling of common data anomalies and format issues.
 
-CREATE OR REPLACE FILE FORMAT my_csv_format2
+CREATE OR REPLACE FILE FORMAT FF_CSV_SAP
   TYPE = 'CSV' -- Specifies the file type to be CSV.
   FIELD_DELIMITER = ',' -- Sets the field delimiter to a comma, which is typical for CSV files.
   FIELD_OPTIONALLY_ENCLOSED_BY = '"' -- Allows text fields to be enclosed in double quotes, useful for handling fields that contain delimiter characters.

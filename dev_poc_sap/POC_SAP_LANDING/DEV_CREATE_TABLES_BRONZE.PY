@@ -29,7 +29,7 @@ def create_tables(session):
     column_names = set()  # Used to track column names and avoid duplicates
 
     # Query to fetch schema definitions
-    schema_query = "SELECT source_table, name, type FROM SAP_BRONZE.RAW_SCHEMAS ORDER BY source_table, name;"
+    schema_query = "SELECT source_table, name, type FROM SAP_RAW_LANDING.GROUPED_SCHEMAS ORDER BY source_table, name;"
     result = session.sql(schema_query).collect()
 
     for row in result:

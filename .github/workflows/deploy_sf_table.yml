@@ -32,7 +32,7 @@ jobs:
 
       - name: Upload artifact to SnowSQL
         run: |
-          ~/bin/snowsql -q 'put file://'$(pwd)'/SDDocumentFlow.sql @~/${{ github.ref_name }} overwrite=true' -o friendly=false
+          ~/bin/snowsql -q 'put file://'$(pwd)'/dev_poc_sap/POC_SAP_GOLD/SDDocumentFlow.sql @~/${{ github.ref_name }} overwrite=true' -o friendly=false
           
       - name: Create or replace table in Snowflake
         run: |

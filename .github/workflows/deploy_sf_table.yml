@@ -34,5 +34,5 @@ jobs:
       - name: Execute SQL file in Snowflake
         run: |
           ~/bin/snowsql -a $SNOWSQL_ACCOUNT -u $SNOWSQL_USER -w $SNOWFLAKE_WAREHOUSE -r $SNOWSQL_ROLE -d $SNOWSQL_DATABASE -s $SNOWFLAKE_SCHEMA -q "
-          CREATE OR REPLACE TABLE SDDocumentFlow AS $(cat dev_poc_sap/poc_sap_gold/SDDocumentFlow.sql)
+          CREATE OR REPLACE TABLE SDDocumentFlow AS $(cat main/dev_poc_sap/poc_sap_gold/SDDocumentFlow.sql)
           "

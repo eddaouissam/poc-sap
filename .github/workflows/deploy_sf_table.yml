@@ -30,10 +30,6 @@ jobs:
           curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
           SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
 
-      - name: Upload SQL file to Snowflake stage
-        run: |
-          ~/bin/snowsql -a $SNOWSQL_ACCOUNT -u $SNOWSQL_USER -w $SNOWFLAKE_WAREHOUSE -r $SNOWSQL_ROLE -d $SNOWSQL_DATABASE -s $SNOWFLAKE_SCHEMA -q "put file://$(pwd)/dev_poc_sap/POC_SAP_GOLD/SDDocumentFlow.sql @~/main overwrite=true" -o friendly=false
-
       - name: Create or replace table in Snowflake
         run: |
           SQL_QUERY=$(cat $(pwd)/dev_poc_sap/POC_SAP_GOLD/SDDocumentFlow.sql)

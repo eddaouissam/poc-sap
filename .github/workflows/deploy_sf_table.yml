@@ -6,7 +6,6 @@ on:
       - "*"
     tags:
       - "v*"
-
   workflow_dispatch:
 
 jobs:
@@ -31,8 +30,7 @@ jobs:
           curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
           SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
 
-      - name: Execute SQL file in Snowflake
+      - name: Create or replace table in Snowflake
         run: |
-          ~/bin/snowsql -a $SNOWSQL_ACCOUNT -u $SNOWSQL_USER -w $SNOWFLAKE_WAREHOUSE -r $SNOWSQL_ROLE -d $SNOWSQL_DATABASE -s $SNOWFLAKE_SCHEMA -q "
-          CREATE OR REPLACE TABLE SDDocumentFlow AS $(cat main/dev_poc_sap/poc_sap_gold/SDDocumentFlow.sql)
-          "
+          SQL_QUERY=$(cat dev_poc_sap/poc_sap_gold/SDDocumentFlow.sql)
+          ~/bin/snowsql -a $SNOWSQL_ACCOUNT -u $SNOWSQL_USER -w $SNOWFLAKE_WAREHOUSE -r $SNOWSQL_ROLE -d $SNOWSQL_DATABASE -s $SNOWFLAKE_SCHEMA -q "CREATE OR REPLACE TABLE SDDocumentFlow AS ${SQL_QUERY}"

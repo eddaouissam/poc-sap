@@ -36,7 +36,4 @@ jobs:
           
       - name: Create or replace table in Snowflake
         run: |
-          ~/bin/snowsql -a $SNOWSQL_ACCOUNT -u $SNOWSQL_USER -w $SNOWFLAKE_WAREHOUSE -r $SNOWSQL_ROLE -d $SNOWSQL_DATABASE -s $SNOWFLAKE_SCHEMA -q "CREATE OR REPLACE TABLE SDDocumentFlow AS ${{ github.ref_name }}/SDDocumentFlow.sql"
-      - name: Create or replace tablein Snowflake
-        run: |
           ~/bin/snowsql -q 'CREATE OR REPLACE TABLE SDDocumentFlow as '\''@~/${{ github.ref_name }}/SDDocumentFlow.sql'\''

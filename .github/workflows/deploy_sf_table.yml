@@ -1,14 +1,21 @@
+# Very basic GitHub Action workflow, goes in ~/.github/workflows/deploy.yaml
+
 name: CI/CD Workflow
 
+# Controls when the workflow will run
 on:
+  # Triggers the workflow on any branch or tag commit
   push:
     branches:
       - "*"
     tags:
       - "v*"
+
+  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 jobs:
+  # This workflow contains a single job called "deploy"
   deploy:
     runs-on: ubuntu-latest
 
@@ -17,23 +24,25 @@ jobs:
       SNOWSQL_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
       SNOWSQL_USER: ${{ secrets.SNOWFLAKE_USERNAME }}
       SNOWSQL_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
-      SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
+      SNOWSQL_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
       SNOWSQL_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
-      SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+      SNOWSQL_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
 
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
 
       - name: Install SnowSQL
         run: |
           curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
           SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
-
-      - name: Upload SQL file to Snowflake stage
+      - name: Upload artifact to SnowSQL
         run: |
-          ~/bin/snowsql -a $SNOWSQL_ACCOUNT -u $SNOWSQL_USER -w $SNOWFLAKE_WAREHOUSE -r $SNOWSQL_ROLE -d $SNOWSQL_DATABASE -s $SNOWFLAKE_SCHEMA -q "put file://$(pwd)/dev_poc_sap/POC_SAP_GOLD/SDDocumentFlow.sql @~/SDDocumentFlow_stage overwrite=true" -o friendly=false
-
-      - name: Create or replace table in Snowflake
+          ~/bin/snowsql -q 'put file://'$(pwd)'/dev_poc_sap/POC_SAP_GOLD/SDDocumentFlow.sql @~/${{ github.ref_name }} overwrite=true' -o friendly=false
+      - name: Create or replace table
         run: |
-          ~/bin/snowsql -a $SNOWSQL_ACCOUNT -u $SNOWSQL_USER -w $SNOWFLAKE_WAREHOUSE -r $SNOWSQL_ROLE -d $SNOWSQL_DATABASE -s $SNOWFLAKE_SCHEMA -q "CREATE OR REPLACE TABLE SDDocumentFlow AS $(cat dev_poc_sap/POC_SAP_GOLD/SDDocumentFlow.sql)" -o friendly=false
+           ~/bin/snowsql -q 'CREATE OR REPLACE TABLE SDDocumentFlow as '\''@~/${{ github.ref_name }}/SDDocumentFlow.sql'\'';' -o friendly=false
+      #- name: Execute Stored Procedure
+       # run: |
+      #  ~/bin/snowsql -q 'CALL MYPROC('\''some parameter HHH'\'');' -o friendly=false

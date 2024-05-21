@@ -36,4 +36,4 @@ jobs:
           
       - name: Create or replace table in Snowflake
         run: |
-          ~/bin/snowsql -q 'CREATE OR REPLACE TABLE SDDocumentFlow as '\''@~/${{ github.ref_name }}/SDDocumentFlow.sql'\''
+          ~/bin/snowsql -q 'CREATE OR REPLACE TABLE SDDocumentFlow as ('\''@~/${{ github.ref_name }}/SDDocumentFlow.sql'\'')

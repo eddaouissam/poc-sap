@@ -33,4 +33,4 @@ jobs:
       - name: Create or replace table in Snowflake
         run: |
           SQL_QUERY=$(cat $(pwd)/dev_poc_sap/POC_SAP_GOLD/SDDocumentFlow.sql)
-          ~/bin/snowsql -q "CREATE OR REPLACE TABLE SDDocumentFlow AS ${SQL_QUERY};" -o friendly=false
+          ~/bin/snowsql -s $SNOWFLAKE_SCHEMA -q "CREATE OR REPLACE TABLE SDDocumentFlow AS ${SQL_QUERY};" -o friendly=false

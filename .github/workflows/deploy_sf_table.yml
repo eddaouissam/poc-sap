@@ -29,10 +29,12 @@ jobs:
         run: |
           curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
           SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
-      - name: Create or replace table in Snowflake
+      - name: Create or replace tables in Snowflake
         run: |
           for sql_file in $(git diff --name-only HEAD~1 HEAD | grep 'dev_poc_sap/POC_SAP_SILVER/.*\.sql'); do
-            TABLE_NAME=$(basename $sql_file .sql)
+            echo "Processing $sql_file"
+            table_name=$(basename $sql_file .sql)
             SQL_QUERY=$(cat $sql_file)
-            ~/bin/snowsql -q "CREATE OR REPLACE TABLE SAP_GOLD.${TABLE_NAME} AS ${SQL_QUERY};" -o friendly=false
+            echo "Creating or replacing table $table_name"
+            ~/bin/snowsql -a $SNOWSQL_ACCOUNT -u $SNOWSQL_USER -w $SNOWFLAKE_WAREHOUSE -r $SNOWSQL_ROLE -d $SNOWSQL_DATABASE -s $SNOWFLAKE_SCHEMA -q "CREATE OR REPLACE TABLE SAP_GOLD.$table_name AS ${SQL_QUERY};" -o friendly=false
           done

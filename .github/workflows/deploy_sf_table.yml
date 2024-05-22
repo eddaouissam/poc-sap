@@ -3,9 +3,7 @@ name: CI/CD Workflow
 on:
   push:
     branches:
-      - "*"
-    tags:
-      - "v*"
+      - main
   workflow_dispatch:
 
 jobs:
@@ -24,11 +22,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 2  # Fetch two commits to ensure HEAD~1 is available
 
       - name: Install SnowSQL
         run: |
           curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
           SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
+
       - name: Create or replace tables in Snowflake
         run: |
           changed_sql_files=$(git diff --name-only HEAD~1 HEAD | grep 'dev_poc_sap/POC_SAP_SILVER/.*\.sql' || true)

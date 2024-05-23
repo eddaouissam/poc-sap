@@ -27,8 +27,8 @@ SELECT
   ADRC.TOWNSHIP_CODE AS TownshipCodeForTownship_TOWNSHIP_CODE, ADRC.TOWNSHIP AS Township_TOWNSHIP, ADRC.MC_COUNTY AS CountyNameInUpperCaseForSearchHelp_MC_COUNTY, ADRC.MC_TOWNSHIP AS TownshipNameInUpperCaseForSearchHelp_MC_TOWNSHIP,
   ADRC.XPCPT AS BusinessPurposeCompletedFlag_XPCPT,
   ADRCT.DATE_FROM AS ValidFrom_DATE_FROM, ADRCT.NATION AS VersionInternationalAddresses_NATION, ADRCT.REMARK AS AddressNotes_REMARK,
-  #ADRT.PERSNUMBER AS PersonNumber_PERSNUMBER,  ADRT.COMM_TYPE AS CommunicationMethod__key____businessAddressServices___COMM_TYPE,
-  #ADRT.DATE_FROM AS ValidFromDate_DATE_FROM,  ADRT.CONSNUMBER AS SequenceNumber_CONSNUMBER,    ADRT.REMARK AS CommunicationLinkNotes_REMARK,
+  -- #ADRT.PERSNUMBER AS PersonNumber_PERSNUMBER,  ADRT.COMM_TYPE AS CommunicationMethod__key____businessAddressServices___COMM_TYPE,
+  -- #ADRT.DATE_FROM AS ValidFromDate_DATE_FROM,  ADRT.CONSNUMBER AS SequenceNumber_CONSNUMBER,    ADRT.REMARK AS CommunicationLinkNotes_REMARK,
   ADR6.PERSNUMBER AS PersonNumber_PERSNUMBER, ADR6.DATE_FROM AS ValidFromDate_DATE_FROM,
   ADR6.CONSNUMBER AS SequenceNumber_CONSNUMBER, ADR6.FLGDEFAULT AS Flag_ThisAddressIsTheDefaultAddress_FLGDEFAULT, ADR6.FLG_NOUSE AS Flag_ThisCommunicationNumberIsNotUsed_FLG_NOUSE,
   ADR6.HOME_FLAG AS RecipientAddressInThisCommunicationType__mailSys_HOME_FLAG, ADR6.SMTP_ADDR AS EMailAddress_SMTP_ADDR, ADR6.SMTP_SRCH AS EMailAddressSearchField_SMTP_SRCH,
@@ -39,5 +39,5 @@ INNER JOIN sap_silver.s_adr6 AS ADR6 ON adrc.client = adr6.client AND adrc.addrn
   AND adrc.date_from = adr6.date_from
 LEFT OUTER JOIN sap_silver.s_adrct AS ADRCT ON adrc.client = adrct.client AND adrc.addrnumber = adrct.addrnumber AND adrc.langu = adrct.langu
   AND adrc.date_from = adrct.date_from
-#LEFT OUTER JOIN sap_silver.s_adrt as ADRT on adrc.client  = adrct.client and adrc.addrnumber = adrt.addrnumber and adrc.langu = adrt.langu
+-- #LEFT OUTER JOIN sap_silver.s_adrt as ADRT on adrc.client  = adrct.client and adrc.addrnumber = adrt.addrnumber and adrc.langu = adrt.langu
 WHERE cast(adrc.date_to AS STRING ) = '9999-12-31'

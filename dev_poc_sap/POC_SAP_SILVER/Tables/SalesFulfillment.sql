@@ -12,7 +12,7 @@ WITH SO AS (
     sum(SO.DeliveredQty_RFMNG) AS DeliveredQty,
     ( sum(SO.DeliveredQty_RFMNG) - sum(SO.InvoiceQty_RFMNG) ) AS DeliveredPendingBilling
   FROM sap_gold.SalesStatus_Items AS SO
-  WHERE Language_SPRAS {{ language }}
+  -- WHERE Language_SPRAS {{ language }}
   GROUP BY SO.Client_MANDT, Currency_WAERK, DeliveredUoM_MEINS,
     InvoiceUoM_MEINS, InvoiceCurrency_WAERS,
     SalesUnit_VRKME, MaterialNumber_MATNR, MaterialText_MAKTX,

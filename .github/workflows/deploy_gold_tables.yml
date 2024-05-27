@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '.github/workflows/deploy_gold_tables.yml'
+      - 'dev_poc_sap/POC_SAP_SILVER/Tables/**'
   workflow_dispatch:
 
 jobs:

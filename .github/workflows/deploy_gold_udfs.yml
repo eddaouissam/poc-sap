@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '.github/workflows/deploy_gold_udfs.yml'
+      - 'dev_poc_sap/POC_SAP_SILVER/User_Defined_Functions/**'
   workflow_dispatch:
 
 jobs:

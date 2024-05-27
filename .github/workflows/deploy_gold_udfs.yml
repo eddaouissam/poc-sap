@@ -1,0 +1,45 @@
+name: Workflow To Deploy Gold UDF's
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      SNOWSQL_PWD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+      SNOWSQL_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+      SNOWSQL_USER: ${{ secrets.SNOWFLAKE_USERNAME }}
+      SNOWSQL_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
+      SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
+      SNOWSQL_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+      SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2  # Fetch two commits to ensure HEAD~1 is available
+
+      - name: Install SnowSQL
+        run: |
+          curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
+          SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
+      - name: Create or replace tables in Snowflake
+        run: |
+          changed_sql_files=$(git diff --name-only HEAD~1 HEAD | grep 'dev_poc_sap/POC_SAP_SILVER/User_Defined_Functions.*\.sql' || true)
+          if [ -z "$changed_sql_files" ]; then
+            echo "No SQL files changed."
+            exit 0
+          fi
+          for sql_file in $changed_sql_files; do
+            echo "Processing $sql_file"
+            table_name=$(basename "$sql_file" .sql)
+            SQL_QUERY=$(cat "$sql_file")
+            echo "Creating or replacing table $table_name"
+            ~/bin/snowsql -q "${SQL_QUERY};" -o friendly=false
+          done

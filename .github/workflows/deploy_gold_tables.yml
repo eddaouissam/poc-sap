@@ -1,4 +1,4 @@
-name: CI/CD Workflow
+name: Workflow To Deploy Gold Tables
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
           SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
       - name: Create or replace tables in Snowflake
         run: |
-          changed_sql_files=$(git diff --name-only HEAD~1 HEAD | grep 'dev_poc_sap/POC_SAP_SILVER/.*\.sql' || true)
+          changed_sql_files=$(git diff --name-only HEAD~1 HEAD | grep 'dev_poc_sap/POC_SAP_SILVER/Tables.*\.sql' || true)
           if [ -z "$changed_sql_files" ]; then
             echo "No SQL files changed."
             exit 0

@@ -1,6 +1,7 @@
 SELECT
   tcurc.mandt AS Client_MANDT, tcurc.waers AS CurrencyCode_WAERS, tcurc.isocd AS CurrencyISO_ISOCD,
-  tcurx.currdec AS CurrencyDecimals_CURRDEC, tcurt.spras AS Language,
+  tcurx.currdec AS CurrencyDecimals_CURRDEC, 
+  -- tcurt.spras AS Language,
   -- tcurt.ktext AS CurrShortText_KTEXT, tcurt.ltext AS CurrLongText_LTEXT
 FROM sap_silver.s_tcurc AS tcurc
 INNER JOIN

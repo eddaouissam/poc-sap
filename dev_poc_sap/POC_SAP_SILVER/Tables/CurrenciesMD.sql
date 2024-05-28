@@ -5,6 +5,6 @@ SELECT
 FROM sap_silver.s_tcurc AS tcurc
 INNER JOIN
   sap_silver.s_tcurx AS tcurx ON tcurc.waers = tcurx.currkey
-INNER JOIN
-  sap_silver.s_tcurtAS tcurt
-  ON tcurc.waers = tcurt.waers AND tcurc.mandt = tcurt.mandt
+-- INNER JOIN
+--   sap_silver.s_tcurtAS tcurt
+--   ON tcurc.waers = tcurt.waers AND tcurc.mandt = tcurt.mandt

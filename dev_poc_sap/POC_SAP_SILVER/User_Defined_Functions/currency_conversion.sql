@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS sap_gold.currency_conversion
   start_date DATE,
   end_date DATE,
   conv_date DATE
-)
+);
 
 CREATE OR REPLACE FUNCTION sap_gold.Currency_Conversion(
   ip_mandt STRING,

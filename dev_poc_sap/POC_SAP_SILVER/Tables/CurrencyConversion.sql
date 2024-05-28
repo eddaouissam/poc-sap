@@ -8,7 +8,7 @@ SELECT
   CurrencyConversion.end_date AS EndDate,
   CurrencyConversion.conv_date AS ConvDate
 FROM
-  utils.currency_conversion AS CurrencyConversion
+  sap_gold.currency_conversion AS CurrencyConversion
 --## CORTEX-CUSTOMER: Uncomment the following code to use latest available
 --exchange rate for reports if the currency conversion DAG is not working or setup
 -- UNION ALL

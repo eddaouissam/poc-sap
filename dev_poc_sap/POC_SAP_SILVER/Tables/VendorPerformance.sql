@@ -5,7 +5,7 @@ WITH
       sap_gold.Languages_T002
     -- WHERE LanguageKey_SPRAS {{ language }}
   ),
-
+ 
   CurrencyConversion AS (
     SELECT
       Client_MANDT, FromCurrency_FCURR, ToCurrency_TCURR, ConvDate, ExchangeRate_UKURS

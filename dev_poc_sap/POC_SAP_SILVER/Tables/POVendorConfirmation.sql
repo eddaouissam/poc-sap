@@ -35,4 +35,4 @@ INNER JOIN sap_gold.PurchaseDocuments AS docs
     AND docs.Item_EBELP = EKES.EBELP
 INNER JOIN sap_gold.VendorsMD AS vendor
   ON vendor.Client_MANDT = docs.Client_MANDT
-    AND vendor.AccountNumberOfVendorOrCreditor_LIFNR = docs.VendorAccountNumber_LIFNR
+    AND vendor.AccountNumberOfVendorOrCreditor_LIFNR = docs.VendorAccountNumber_LIFNR 

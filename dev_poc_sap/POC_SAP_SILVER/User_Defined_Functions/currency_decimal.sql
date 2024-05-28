@@ -14,7 +14,7 @@ RETURNS STRING
 LANGUAGE SQL
 AS
 $$
-  SELECT currdec
+  SELECT currdec::STRING
   FROM DEV_DB_VISEO.SAP_SILVER.s_tcurx
   WHERE currkey = ip_curr
 $$;

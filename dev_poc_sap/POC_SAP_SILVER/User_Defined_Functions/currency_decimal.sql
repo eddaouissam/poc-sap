@@ -9,11 +9,12 @@ CREATE OR REPLACE TABLE DEV_DB_VISEO.SAP_GOLD.currency_decimal AS (
 
 CREATE OR REPLACE FUNCTION DEV_DB_VISEO.SAP_GOLD.Currency_Decimal(
   ip_curr STRING
-) AS
-(
-  SELECT
-    currdec
+)
+RETURNS STRING
+LANGUAGE SQL
+AS
+$$
+  SELECT currdec
   FROM DEV_DB_VISEO.SAP_SILVER.s_tcurx
   WHERE currkey = ip_curr
-)
-;
+$$;

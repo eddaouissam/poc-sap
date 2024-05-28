@@ -92,7 +92,7 @@ SELECT
   COALESCE(ekbe.WRBTR * currency_decimal.CURRFIX, ekbe.WRBTR) AS AmountInDocumentCurrency_WRBTR
 FROM
   sap_silver.s_ekbe AS ekbe
-LEFT JOIN sap_gold.currency_decimal AS currency_decimal
+LEFT JOIN utils.currency_decimal AS currency_decimal
   ON ekbe.WAERS = currency_decimal.CURRKEY
 LEFT JOIN utils.calendar_date_dim AS CalendarDateDimension_BUDAT
   ON CalendarDateDimension_BUDAT.Date = ekbe.BUDAT

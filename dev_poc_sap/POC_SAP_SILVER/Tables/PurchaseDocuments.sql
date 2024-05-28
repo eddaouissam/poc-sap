@@ -395,7 +395,7 @@ FROM sap_silver.s_ekpo AS ekpo
 INNER JOIN sap_silver.s_ekko AS ekko
   ON ekko.MANDT = ekpo.MANDT
     AND ekko.EBELN = ekpo.EBELN
-LEFT JOIN sap_gold.currency_decimal AS currency_decimal
+LEFT JOIN utils.currency_decimal AS currency_decimal
   ON ekko.WAERS = currency_decimal.CURRKEY
 LEFT JOIN utils.calendar_date_dim AS CalendarDateDimension_AEDAT
   ON CalendarDateDimension_AEDAT.Date = ekko.AEDAT

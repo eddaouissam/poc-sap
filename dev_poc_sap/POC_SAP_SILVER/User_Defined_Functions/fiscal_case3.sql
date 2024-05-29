@@ -9,7 +9,7 @@ AS
 $$
   SELECT MIN(
     CONCAT(
-      CAST(IF(Bdatj = '0000', CAST(EXTRACT(YEAR FROM ip_date) AS STRING), Bdatj) AS INT) + CAST(Reljr AS INT),
+      CAST(IFF(Bdatj = '0000', CAST(EXTRACT(YEAR FROM ip_date) AS STRING), Bdatj) AS INT) + CAST(Reljr AS INT),
       Poper
     )
   )
@@ -18,7 +18,7 @@ $$
     Mandt = ip_mandt
     AND Periv = ip_periv
     AND CONCAT(
-      IF(Bdatj = '0000', TO_CHAR(EXTRACT(YEAR FROM ip_date)), Bdatj),
+      IFF(Bdatj = '0000', TO_CHAR(EXTRACT(YEAR FROM ip_date)), Bdatj),
       Bumon,
       Butag
     ) >= TO_CHAR(ip_date, 'YYYYMMDD')

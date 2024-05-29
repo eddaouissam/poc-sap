@@ -1,16 +1,20 @@
-
-CREATE OR REPLACE FUNCTION SAP_GOLD.Fiscal_Case2(
-  ip_mandt STRING, ip_periv STRING, ip_date DATE
-) AS 
-((
-    SELECT IF(
-      COALESCE(LENGTH(Xkale), 0) + COALESCE(LENGTH(Xjabh), 0) = 0,
-      'CASE3',
-      IF(Xkale IS NOT NULL, 'CASE1', 'CASE2')
-    )
-    FROM
-      sap_silver.s_t009
-    WHERE
-      Mandt = Ip_Mandt
-      AND Periv = Ip_Periv
-))
+CREATE OR REPLACE FUNCTION sap_gold.Fiscal_Period (
+  ip_mandt STRING, 
+  ip_periv STRING, 
+  ip_date DATE
+) 
+RETURNS STRING
+LANGUAGE SQL
+AS
+$$
+  SELECT 
+    CASE 
+      WHEN COALESCE(LENGTH(Xkale), 0) + COALESCE(LENGTH(Xjabh), 0) = 0 THEN 'CASE3'
+      WHEN Xkale IS NOT NULL THEN 'CASE1'
+      ELSE 'CASE2'
+    END
+  FROM sap_silver.s_t009
+  WHERE Mandt = ip_mandt
+    AND Periv = ip_periv
+  LIMIT 1
+$$;

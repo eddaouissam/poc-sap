@@ -111,54 +111,53 @@ WITH
       POOrderHistory.AmountInLocalCurrency_DMBTR,
       POOrderHistory.CurrencyKey_WAERS AS POOrderHistoryCurrencyKey_WAERS,
       -- Actual Reciept Date
-      IF(
+      IFF(
         POOrderHistory.MovementType__inventoryManagement___BWART = '101',
         POOrderHistory.PostingDateInTheDocument_BUDAT,
         NULL) AS PostingDateInTheDocument_BUDAT,
 
       -- DeliveryStatus
       -- TRUE stands for Delivered Orders and FALSE stands for NotDelivered Orders
-      IF(
+      IFF(
         PurchaseOrderScheduleLine.DeliveryCompletedFlag_ELIKZ IS NULL,
         FALSE,
         TRUE
       ) AS IsDelivered,
 
       -- Vendor Cycle Time in Days
-      IF(
+      IFF(
         PurchaseOrderScheduleLine.DeliveryCompletedFlag_ELIKZ = 'X',
         COALESCE(
-          DATE_DIFF(
-            IF(
+          DATEDIFF(DAY,
+            IFF(
               POOrderHistory.MovementType__inventoryManagement___BWART = '101',
               MAX(POOrderHistory.PostingDateInTheDocument_BUDAT) OVER (
                 PARTITION BY PurchaseOrderScheduleLine.Client_MANDT,
                   PurchaseOrderScheduleLine.DocumentNumber_EBELN,
                   PurchaseOrderScheduleLine.Item_EBELP),
               NULL),
-            PurchaseOrderScheduleLine.PurchasingDocumentDate_BEDAT,
-            DAY),
+            PurchaseOrderScheduleLine.PurchasingDocumentDate_BEDAT),
           0),
         NULL) AS VendorCycleTimeInDays,
 
       -- Vendor Quality (Rejection)
       -- TRUE stands for Rejected Orders and FALSE stands for NotRejected Orders
-      IF(
+      IFF(
         POOrderHistory.MovementType__inventoryManagement___BWART IN ('122', '161'),
         TRUE,
         FALSE) AS IsRejected,
       -- Rejected Quantity
-      IF(
+      IFF(
         POOrderHistory.MovementType__inventoryManagement___BWART IN ('122', '161'),
         POOrderHistory.Quantity_MENGE,
         0) AS RejectedQuantity,
 
       -- Vendor On Time Delivery
       -- TRUE stands for NotDelayed Orders and FALSE for Delayed Orders
-      IF(
+      IFF(
         PurchaseOrderScheduleLine.DeliveryCompletedFlag_ELIKZ = 'X',
-        IF(
-          IF(
+        IFF(
+          IFF(
             POOrderHistory.MovementType__inventoryManagement___BWART = '101',
             POOrderHistory.PostingDateInTheDocument_BUDAT,
             NULL) <= PurchaseOrderScheduleLine.ItemDeliveryDate_EINDT,
@@ -168,13 +167,13 @@ WITH
 
       -- Vendor InFull Delivery
       -- TRUE stands for DeliveredInFull Orders and FALSE stands for NotDeliveredInFull Orders
-      IF(
+      IFF(
         PurchaseOrderScheduleLine.DeliveryCompletedFlag_ELIKZ = 'X',
-        IF(
+        IFF(
           PurchaseOrderScheduleLine.UnderdeliveryToleranceLimit_UNTTO IS NULL AND PurchaseOrderScheduleLine.OverdeliveryToleranceLimit_UEBTO IS NULL,
-          IF(
+          IFF(
             SUM(
-              IF(
+              IFF(
                 POOrderHistory.MovementType__inventoryManagement___BWART = '101',
                 POOrderHistory.Quantity_MENGE,
                 (POOrderHistory.Quantity_MENGE * -1)
@@ -184,9 +183,9 @@ WITH
                 PurchaseOrderScheduleLine.Item_EBELP) >= PurchaseOrderScheduleLine.POQuantity_MENGE,
             TRUE,
             FALSE),
-          IF(
+          IFF(
             SUM(
-              IF(
+              IFF(
                 POOrderHistory.MovementType__inventoryManagement___BWART = '101',
                 POOrderHistory.Quantity_MENGE,
                 (POOrderHistory.Quantity_MENGE * -1)
@@ -196,9 +195,9 @@ WITH
                 PurchaseOrderScheduleLine.Item_EBELP) >= PurchaseOrderScheduleLine.POQuantity_MENGE - PurchaseOrderScheduleLine.UnderdeliveryToleranceLimit,
             TRUE,
             FALSE)
-          OR IF(
+          OR IFF(
             SUM(
-              IF(
+              IFF(
                 POOrderHistory.MovementType__inventoryManagement___BWART = '101',
                 POOrderHistory.Quantity_MENGE,
                 (POOrderHistory.Quantity_MENGE * -1)
@@ -213,13 +212,13 @@ WITH
 
       -- Vendor Invoice Accuracy
       -- TRUE stands for Accurate Invoices and FALSE stands for Inaccurate Invoices
-      IF(
+      IFF(
         PurchaseOrderScheduleLine.DeliveryCompletedFlag_ELIKZ = 'X',
-        IF(
+        IFF(
           PurchaseOrderScheduleLine.UnderdeliveryToleranceLimit_UNTTO IS NULL AND PurchaseOrderScheduleLine.OverdeliveryToleranceLimit_UEBTO IS NULL,
-          IF(
+          IFF(
             PurchaseOrderScheduleLine.POQuantity_MENGE = SUM(
-              IF(
+              IFF(
                 POOrderHistory.MovementType__inventoryManagement___BWART = '101',
                 POOrderHistory.Quantity_MENGE,
                 (POOrderHistory.Quantity_MENGE * -1)
@@ -229,9 +228,9 @@ WITH
                 PurchaseOrderScheduleLine.Item_EBELP),
             TRUE,
             FALSE),
-          IF(
+          IFF(
             SUM(
-              IF(
+              IFF(
                 POOrderHistory.MovementType__inventoryManagement___BWART = '101',
                 POOrderHistory.Quantity_MENGE,
                 (POOrderHistory.Quantity_MENGE * -1)
@@ -243,9 +242,9 @@ WITH
             AND PurchaseOrderScheduleLine.POQuantity_MENGE + purchaseOrderScheduleLine.OverdeliveryToleranceLimit,
             TRUE,
             FALSE)
-          OR IF(
+          OR IFF(
             SUM(
-              IF(
+              IFF(
                 POOrderHistory.MovementType__inventoryManagement___BWART = '101',
                 POOrderHistory.Quantity_MENGE,
                 (POOrderHistory.Quantity_MENGE * -1)
@@ -262,13 +261,13 @@ WITH
 
       -- Vendor Spend Analysis In Source Currency
       -- Goods Receipt Amount In Source Currency
-      IF(POOrderHistory.MovementType__inventoryManagement___BWART = '101',
+      IFF(POOrderHistory.MovementType__inventoryManagement___BWART = '101',
         POOrderHistory.AmountInLocalCurrency_DMBTR,
         (POOrderHistory.AmountInLocalCurrency_DMBTR * -1)
       ) AS GoodsReceiptAmountInSourceCurrency,
 
       -- Goods Receipt Quantity
-      IF(
+      IFF(
         POOrderHistory.MovementType__inventoryManagement___BWART = '101',
         POOrderHistory.Quantity_MENGE,
         (POOrderHistory.Quantity_MENGE * -1)
@@ -326,13 +325,13 @@ WITH
       ANY_VALUE(PurchaseOrdersGoodsReceipt. VendorAccountNumber_LIFNR) AS VendorAccountNumber_LIFNR,
       ANY_VALUE(PurchaseOrdersGoodsReceipt.Company_BUKRS) AS Company_BUKRS,
       ANY_VALUE(PurchaseOrdersGoodsReceipt.Plant_WERKS) AS Plant_WERKS,
-      LOGICAL_AND(PurchaseOrdersGoodsReceipt.IsDelivered) AS IsDelivered,
+      BOOLAND_AGG(PurchaseOrdersGoodsReceipt.IsDelivered) AS IsDelivered,
       MAX(PurchaseOrdersGoodsReceipt.VendorCycleTimeInDays) AS VendorCycleTimeInDays,
-      LOGICAL_OR(PurchaseOrdersGoodsReceipt.IsRejected) AS IsRejected,
+      BOOLOR_AGG(PurchaseOrdersGoodsReceipt.IsRejected) AS IsRejected,
       SUM(PurchaseOrdersGoodsReceipt.RejectedQuantity) AS RejectedQuantity,
-      LOGICAL_AND(PurchaseOrdersGoodsReceipt.IsDeliveredOnTime) AS IsDeliveredOnTime,
-      LOGICAL_AND(PurchaseOrdersGoodsReceipt.IsDeliveredInFull) AS IsDeliveredInFull,
-      LOGICAL_AND(PurchaseOrdersGoodsReceipt.IsGoodsReceiptAccurate) AS IsGoodsReceiptAccurate,
+      BOOLAND_AGG(PurchaseOrdersGoodsReceipt.IsDeliveredOnTime) AS IsDeliveredOnTime,
+      BOOLAND_AGG(PurchaseOrdersGoodsReceipt.IsDeliveredInFull) AS IsDeliveredInFull,
+      BOOLAND_AGG(PurchaseOrdersGoodsReceipt.IsGoodsReceiptAccurate) AS IsGoodsReceiptAccurate,
       SUM(PurchaseOrdersGoodsReceipt.GoodsReceiptQuantity) AS GoodsReceiptQuantity,
       SUM(PurchaseOrdersGoodsReceipt.GoodsReceiptAmountInSourceCurrency) AS GoodsReceiptAmountInSourceCurrency,
       MAX(PurchaseOrdersGoodsReceipt.YearOfPurchasingDocumentDate_BEDAT) AS YearOfPurchasingDocumentDate_BEDAT,
@@ -454,53 +453,53 @@ SELECT
   PurchaseDocuments.GoodsReceiptAmountInSourceCurrency * CurrencyConversion.ExchangeRate_UKURS AS GoodsReceiptAmountInTargetCurrency,
   PurchaseOrdersInvoiceReceipt.InvoiceAmountInSourceCurrency * CurrencyConversion.ExchangeRate_UKURS AS InvoiceAmountInTargetCurrency,
   -- DeliveryStatus
-  IF(
+  IFF(
     PurchaseDocuments.IsDelivered, TRUE, FALSE
   ) AS IsDelivered,
   -- Vendor Quality (Rejection)
-  IF(
+  IFF(
     PurchaseDocuments.IsRejected, TRUE, FALSE
   ) AS IsRejected,
   -- Vendor On Time Delivery
-  IF(
+  IFF(
     PurchaseDocuments.IsDeliveredOnTime IS NULL,
     'NotApplicable',
-    IF(PurchaseDocuments.IsDeliveredOnTime,
+    IFF(PurchaseDocuments.IsDeliveredOnTime,
       'NotDelayed',
       'Delayed')
   ) AS VendorOnTimeDelivery,
   -- Vendor InFull Delivery
-  IF(
+  IFF(
     PurchaseDocuments.IsDeliveredInFull IS NULL,
     'NotApplicable',
-    IF(PurchaseDocuments.IsDeliveredInFull,
+    IFF(PurchaseDocuments.IsDeliveredInFull,
       'DeliveredInFull',
       'NotDeliveredInFull')
   ) AS VendorInFullDelivery,
   -- Vendor On Time In Full Delivery
-  IF(
+  IFF(
     PurchaseDocuments.IsDeliveredInFull IS NULL OR PurchaseDocuments.IsDeliveredOnTime IS NULL,
     'NotApplicable',
-    IF(
+    IFF(
       PurchaseDocuments.IsDeliveredInFull AND PurchaseDocuments.IsDeliveredOnTime,
       'OTIF',
       'NotOTIF')
   ) AS VendorOnTimeInFullDelivery,
   -- Vendor Invoice Accuracy
-  IF(
+  IFF(
     PurchaseDocuments.IsGoodsReceiptAccurate IS NULL OR PurchaseOrdersInvoiceReceipt.InvoiceQuantity IS NULL,
     'NotApplicable',
-    IF(
+    IFF(
       PurchaseDocuments.IsGoodsReceiptAccurate
       AND PurchaseDocuments.POQuantity_MENGE = PurchaseOrdersInvoiceReceipt.InvoiceQuantity,
       'AccurateInvoice',
       'InaccurateInvoice')
   ) AS VendorInvoiceAccuracy,
   -- Past Due and Open
-  IF(
+  IFF(
     PurchaseDocuments.IsDelivered,
     'NotApplicable',
-    IF(
+    IFF(
       CURRENT_DATE() > PurchaseDocuments.ItemDeliveryDate_EINDT,
       'PastDue',
       'Open')
@@ -569,4 +568,4 @@ LEFT JOIN
   ON
     PurchaseDocuments.Client_MANDT = MaterialTypes.Client_MANDT
     AND PurchaseDocuments.MaterialType_MTART = MaterialTypes.MaterialType_MTART
-    AND MaterialTypes.LanguageKey_SPRAS = LanguageKey.LanguageKey_SPRAS
+    AND MaterialTypes.LanguageKey_SPRAS = LanguageKey.LanguageKey_SPRAS;

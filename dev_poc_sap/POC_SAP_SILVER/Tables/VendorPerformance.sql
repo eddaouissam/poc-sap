@@ -1,22 +1,16 @@
 WITH
   LanguageKey AS (
     SELECT LanguageKey_SPRAS
-    FROM
-      sap_gold.Languages_T002
-    -- WHERE LanguageKey_SPRAS {{ language }}
+    FROM sap_gold.Languages_T002
   ),
  
   CurrencyConversion AS (
     SELECT
       Client_MANDT, FromCurrency_FCURR, ToCurrency_TCURR, ConvDate, ExchangeRate_UKURS
-    FROM
-      sap_gold.CurrencyConversion
-     WHERE ExchangeRateType_KURST = 'M'
-      --##CORTEX-CUSTOMER Modify the exchange rate type based on your requirement
-      -- AND ToCurrency_TCURR {{ currency }}
+    FROM sap_gold.CurrencyConversion
+    WHERE ExchangeRateType_KURST = 'M'
   ),
 
-  -- Purchase Order Item level details
   PurchaseOrderScheduleLine AS (
     SELECT
       PurchaseOrders.Client_MANDT,
@@ -54,7 +48,6 @@ WITH
         0) AS OverdeliveryToleranceLimit
     FROM
       sap_gold.PurchaseDocuments AS PurchaseOrders
-    -- PO Schedule Lines details for PO Item
     LEFT JOIN
       (
         SELECT
@@ -68,15 +61,10 @@ WITH
         PurchaseOrders.Client_MANDT = POScheduleLine.Client_MANDT
         AND PurchaseOrders.DocumentNumber_EBELN = POScheduleLine.PurchasingDocumentNumber_EBELN
         AND PurchaseOrders.Item_EBELP = POScheduleLine.ItemNumberOfPurchasingDocument_EBELP
-    --## DocumentType_BSART='NB' or 'ENB'-> Standrad PO
-    --## ItemCategoryinPurchasingDocument_PSTYP ='2'-> Consignment PO
     WHERE PurchaseOrders.DocumentType_BSART IN ('NB', 'ENB')
       AND PurchaseOrders.ItemCategoryinPurchasingDocument_PSTYP != '2'
   ),
 
-  -- Getting item historical data.
-  -- This join results in mutiple rows for the same item.
-  -- This will be aggreagated and brought back at Item level in the next step.
   PurchaseOrdersGoodsReceipt AS (
     SELECT
       PurchaseOrderScheduleLine.Client_MANDT,
@@ -110,21 +98,15 @@ WITH
       PurchaseOrderScheduleLine.WeekOfPurchasingDocumentDate_BEDAT,
       POOrderHistory.AmountInLocalCurrency_DMBTR,
       POOrderHistory.CurrencyKey_WAERS AS POOrderHistoryCurrencyKey_WAERS,
-      -- Actual Reciept Date
       IFF(
         POOrderHistory.MovementType__inventoryManagement___BWART = '101',
         POOrderHistory.PostingDateInTheDocument_BUDAT,
         NULL) AS PostingDateInTheDocument_BUDAT,
-
-      -- DeliveryStatus
-      -- TRUE stands for Delivered Orders and FALSE stands for NotDelivered Orders
       IFF(
         PurchaseOrderScheduleLine.DeliveryCompletedFlag_ELIKZ IS NULL,
         FALSE,
         TRUE
       ) AS IsDelivered,
-
-      -- Vendor Cycle Time in Days
       IFF(
         PurchaseOrderScheduleLine.DeliveryCompletedFlag_ELIKZ = 'X',
         COALESCE(
@@ -139,21 +121,14 @@ WITH
             PurchaseOrderScheduleLine.PurchasingDocumentDate_BEDAT),
           0),
         NULL) AS VendorCycleTimeInDays,
-
-      -- Vendor Quality (Rejection)
-      -- TRUE stands for Rejected Orders and FALSE stands for NotRejected Orders
       IFF(
         POOrderHistory.MovementType__inventoryManagement___BWART IN ('122', '161'),
         TRUE,
         FALSE) AS IsRejected,
-      -- Rejected Quantity
       IFF(
         POOrderHistory.MovementType__inventoryManagement___BWART IN ('122', '161'),
         POOrderHistory.Quantity_MENGE,
         0) AS RejectedQuantity,
-
-      -- Vendor On Time Delivery
-      -- TRUE stands for NotDelayed Orders and FALSE for Delayed Orders
       IFF(
         PurchaseOrderScheduleLine.DeliveryCompletedFlag_ELIKZ = 'X',
         IFF(
@@ -164,9 +139,6 @@ WITH
           TRUE,
           FALSE),
         NULL) AS IsDeliveredOnTime,
-
-      -- Vendor InFull Delivery
-      -- TRUE stands for DeliveredInFull Orders and FALSE stands for NotDeliveredInFull Orders
       IFF(
         PurchaseOrderScheduleLine.DeliveryCompletedFlag_ELIKZ = 'X',
         IFF(
@@ -209,9 +181,6 @@ WITH
             FALSE)
         ),
         NULL) AS IsDeliveredInFull,
-
-      -- Vendor Invoice Accuracy
-      -- TRUE stands for Accurate Invoices and FALSE stands for Inaccurate Invoices
       IFF(
         PurchaseOrderScheduleLine.DeliveryCompletedFlag_ELIKZ = 'X',
         IFF(
@@ -258,15 +227,10 @@ WITH
             FALSE)
         ),
         NULL) AS IsGoodsReceiptAccurate,
-
-      -- Vendor Spend Analysis In Source Currency
-      -- Goods Receipt Amount In Source Currency
       IFF(POOrderHistory.MovementType__inventoryManagement___BWART = '101',
         POOrderHistory.AmountInLocalCurrency_DMBTR,
         (POOrderHistory.AmountInLocalCurrency_DMBTR * -1)
       ) AS GoodsReceiptAmountInSourceCurrency,
-
-      -- Goods Receipt Quantity
       IFF(
         POOrderHistory.MovementType__inventoryManagement___BWART = '101',
         POOrderHistory.Quantity_MENGE,
@@ -286,11 +250,7 @@ WITH
           PostingDateInTheDocument_BUDAT,
           Quantity_MENGE
         FROM sap_gold.PurchaseDocumentsHistory
-        --## TransactioneventType_VGABE='1' -> Goods Receipt
         WHERE TransactioneventType_VGABE = '1'
-          --## MovementType__inventoryManagement___BWART='101' -> Goods Receipt
-          --## MovementType__inventoryManagement___BWART='102' -> Returns
-          --## MovementType__inventoryManagement___BWART='122' or '161' -> Rejections
           AND MovementType__inventoryManagement___BWART IN ('101', '102', '161', '122')
       ) AS POOrderHistory
       ON
@@ -311,7 +271,7 @@ WITH
       MAX(PurchaseOrdersGoodsReceipt.OrderDateOfScheduleLine_BEDAT) AS OrderDateOfScheduleLine_BEDAT,
       MAX(PurchaseOrdersGoodsReceipt.PostingDateInTheDocument_BUDAT) AS PostingDateInTheDocument_BUDAT,
       SUM(PurchaseOrdersGoodsReceipt.AmountInLocalCurrency_DMBTR) AS AmountInLocalCurrency_DMBTR,
-      ANY_VALUE(PurchaseOrdersGoodsReceipt.POOrderHistoryCurrencyKey_WAERS)AS POOrderHistoryCurrencyKey_WAERS,
+      ANY_VALUE(PurchaseOrdersGoodsReceipt.POOrderHistoryCurrencyKey_WAERS) AS POOrderHistoryCurrencyKey_WAERS,
       AVG(PurchaseOrdersGoodsReceipt.POQuantity_MENGE) AS POQuantity_MENGE,
       ANY_VALUE(PurchaseOrdersGoodsReceipt.UoM_MEINS) AS UoM_MEINS,
       AVG(PurchaseOrdersGoodsReceipt.NetPrice_NETPR) AS NetPrice_NETPR,
@@ -322,7 +282,7 @@ WITH
       ANY_VALUE(PurchaseOrdersGoodsReceipt.MaterialGroup_MATKL) AS MaterialGroup_MATKL,
       ANY_VALUE(PurchaseOrdersGoodsReceipt.PurchasingOrganization_EKORG) AS PurchasingOrganization_EKORG,
       ANY_VALUE(PurchaseOrdersGoodsReceipt.PurchasingGroup_EKGRP) AS PurchasingGroup_EKGRP,
-      ANY_VALUE(PurchaseOrdersGoodsReceipt. VendorAccountNumber_LIFNR) AS VendorAccountNumber_LIFNR,
+      ANY_VALUE(PurchaseOrdersGoodsReceipt.VendorAccountNumber_LIFNR) AS VendorAccountNumber_LIFNR,
       ANY_VALUE(PurchaseOrdersGoodsReceipt.Company_BUKRS) AS Company_BUKRS,
       ANY_VALUE(PurchaseOrdersGoodsReceipt.Plant_WERKS) AS Plant_WERKS,
       BOOLAND_AGG(PurchaseOrdersGoodsReceipt.IsDelivered) AS IsDelivered,
@@ -342,230 +302,150 @@ WITH
       PurchaseOrdersGoodsReceipt.Client_MANDT,
       PurchaseOrdersGoodsReceipt.DocumentNumber_EBELN,
       PurchaseOrdersGoodsReceipt.Item_EBELP
-  )
+  ),
 
-SELECT
-  PurchaseDocuments.Client_MANDT,
-  PurchaseDocuments.DocumentNumber_EBELN,
-  PurchaseDocuments.Item_EBELP,
-  PurchaseDocuments.PurchasingDocumentDate_BEDAT,
-  PurchaseDocuments.NetOrderValueinPOCurrency_NETWR,
-  PurchaseDocuments.CurrencyKey_WAERS,
-  PurchaseDocuments.ItemDeliveryDate_EINDT,
-  PurchaseDocuments.OrderDateOfScheduleLine_BEDAT,
-  PurchaseDocuments.PostingDateInTheDocument_BUDAT,
-  PurchaseDocuments.AmountInLocalCurrency_DMBTR,
-  PurchaseDocuments.POOrderHistoryCurrencyKey_WAERS,
-  PurchaseDocuments.POQuantity_MENGE,
-  PurchaseDocuments.UoM_MEINS,
-  PurchaseDocuments.NetPrice_NETPR,
-  PurchaseDocuments.CreatedOn_AEDAT,
-  PurchaseDocuments.Status_STATU,
-  PurchaseDocuments.MaterialNumber_MATNR,
-  PurchaseDocuments.MaterialType_MTART,
-  PurchaseDocuments.MaterialGroup_MATKL,
-  PurchaseDocuments.PurchasingOrganization_EKORG,
-  PurchaseDocuments.PurchasingGroup_EKGRP,
-  PurchaseDocuments.VendorAccountNumber_LIFNR,
-  PurchaseDocuments.Company_BUKRS,
-  PurchaseDocuments.Plant_WERKS,
-  PurchaseDocuments.YearOfPurchasingDocumentDate_BEDAT,
-  PurchaseDocuments.MonthOfPurchasingDocumentDate_BEDAT,
-  PurchaseDocuments.WeekOfPurchasingDocumentDate_BEDAT,
-  CASE sap_gold.Fiscal_Period(
-    PurchaseDocuments.Client_MANDT,
-    Companies.FiscalyearVariant_PERIV,
-    PurchaseDocuments.PurchasingDocumentDate_BEDAT)
-    WHEN 'CASE1' THEN
-      SUBSTRING(sap_gold.Fiscal_Case1(
-        PurchaseDocuments.Client_MANDT,
-        Companies.FiscalyearVariant_PERIV,
-        PurchaseDocuments.PurchasingDocumentDate_BEDAT), 1, 4)
-    WHEN 'CASE2' THEN
-      SUBSTRING(sap_gold.Fiscal_Case2(
-        PurchaseDocuments.Client_MANDT,
-        Companies.FiscalyearVariant_PERIV,
-        PurchaseDocuments.PurchasingDocumentDate_BEDAT), 1, 4)
-    WHEN 'CASE3' THEN
-      SUBSTRING(sap_gold.Fiscal_Case3(
-        PurchaseDocuments.Client_MANDT,
-        Companies.FiscalyearVariant_PERIV,
-        PurchaseDocuments.PurchasingDocumentDate_BEDAT), 1, 4)
-    ELSE 'DATA ISSUE'
-  END AS FiscalYear,
-  CASE sap_gold.Fiscal_Period(
-    PurchaseDocuments.Client_MANDT,
-    Companies.FiscalyearVariant_PERIV,
-    PurchaseDocuments.PurchasingDocumentDate_BEDAT)
-    WHEN 'CASE1' THEN
-      SUBSTRING(sap_gold.Fiscal_Case1(
-        PurchaseDocuments.Client_MANDT,
-        Companies.FiscalyearVariant_PERIV,
-        PurchaseDocuments.PurchasingDocumentDate_BEDAT), 6, 2)
-    WHEN 'CASE2' THEN
-      SUBSTRING(sap_gold.Fiscal_Case2(
-        PurchaseDocuments.Client_MANDT,
-        Companies.FiscalyearVariant_PERIV,
-        PurchaseDocuments.PurchasingDocumentDate_BEDAT), 6, 2)
-    WHEN 'CASE3' THEN
-      SUBSTRING(sap_gold.Fiscal_Case3(
-        PurchaseDocuments.Client_MANDT,
-        Companies.FiscalyearVariant_PERIV,
-        PurchaseDocuments.PurchasingDocumentDate_BEDAT), 6, 2)
-    ELSE 'DATA ISSUE'
-  END AS FiscalPeriod,
-  -- Invoice Quantity
-  PurchaseOrdersInvoiceReceipt.InvoiceQuantity,
-  -- Vendor Spend Analysis (Invoice Amount in Source Currency)
-  PurchaseOrdersInvoiceReceipt.InvoiceAmountInSourceCurrency,
-  -- Invoice Date
-  PurchaseOrdersInvoiceReceipt.InvoiceDate,
-  PurchaseOrdersInvoiceReceipt.YearOfInvoiceDate,
-  PurchaseOrdersInvoiceReceipt.MonthOfInvoiceDate,
-  PurchaseOrdersInvoiceReceipt.WeekOfInvoiceDate,
-  -- Invoice Count
-  PurchaseOrdersInvoiceReceipt.InvoiceCount,
-  -- The following text fields are language independent.
-  PurchasingOrganizations.PurchasingOrganizationText_EKOTX,
-  PurchasingGroups.PurchasingGroupText_EKNAM,
-  Vendors.CountryKey_LAND1,
-  Vendors.NAME1,
-  Companies.CompanyText_BUTXT,
-  Companies.FiscalyearVariant_PERIV,
-  -- The following text fields are language dependent.
-  LanguageKey.LanguageKey_SPRAS,
-  Materials.MaterialText_MAKTX,
-  MaterialTypes.DescriptionOfMaterialType_MTBEZ,
-  -- VendorCycleTime In Days
-  PurchaseDocuments.VendorCycleTimeInDays,
-  -- Rejected Quantity
-  PurchaseDocuments.RejectedQuantity,
-  -- Goods Receipt Quantity
-  PurchaseDocuments.GoodsReceiptQuantity,
-  -- Vendor Spend Analysis (Goods Receipt Amount in Source Currency)
-  PurchaseDocuments.GoodsReceiptAmountInSourceCurrency,
-  -- The following columns are having amount/prices in target currency.
-  CurrencyConversion.ExchangeRate_UKURS,
-  CurrencyConversion.ToCurrency_TCURR AS TargetCurrency_TCURR,
-  PurchaseDocuments.AmountInLocalCurrency_DMBTR * CurrencyConversion.ExchangeRate_UKURS AS AmountInTargetCurrency_DMBTR,
-  PurchaseDocuments.NetPrice_NETPR * CurrencyConversion.ExchangeRate_UKURS AS NetPriceInTargetCurrency_NETPR,
-  PurchaseDocuments.NetOrderValueinPOCurrency_NETWR * CurrencyConversion.ExchangeRate_UKURS AS NetOrderValueinTargetCurrency_NETWR,
-  PurchaseDocuments.GoodsReceiptAmountInSourceCurrency * CurrencyConversion.ExchangeRate_UKURS AS GoodsReceiptAmountInTargetCurrency,
-  PurchaseOrdersInvoiceReceipt.InvoiceAmountInSourceCurrency * CurrencyConversion.ExchangeRate_UKURS AS InvoiceAmountInTargetCurrency,
-  -- DeliveryStatus
-  IFF(
-    PurchaseDocuments.IsDelivered, TRUE, FALSE
-  ) AS IsDelivered,
-  -- Vendor Quality (Rejection)
-  IFF(
-    PurchaseDocuments.IsRejected, TRUE, FALSE
-  ) AS IsRejected,
-  -- Vendor On Time Delivery
-  IFF(
-    PurchaseDocuments.IsDeliveredOnTime IS NULL,
-    'NotApplicable',
-    IFF(PurchaseDocuments.IsDeliveredOnTime,
-      'NotDelayed',
-      'Delayed')
-  ) AS VendorOnTimeDelivery,
-  -- Vendor InFull Delivery
-  IFF(
-    PurchaseDocuments.IsDeliveredInFull IS NULL,
-    'NotApplicable',
-    IFF(PurchaseDocuments.IsDeliveredInFull,
-      'DeliveredInFull',
-      'NotDeliveredInFull')
-  ) AS VendorInFullDelivery,
-  -- Vendor On Time In Full Delivery
-  IFF(
-    PurchaseDocuments.IsDeliveredInFull IS NULL OR PurchaseDocuments.IsDeliveredOnTime IS NULL,
-    'NotApplicable',
-    IFF(
-      PurchaseDocuments.IsDeliveredInFull AND PurchaseDocuments.IsDeliveredOnTime,
-      'OTIF',
-      'NotOTIF')
-  ) AS VendorOnTimeInFullDelivery,
-  -- Vendor Invoice Accuracy
-  IFF(
-    PurchaseDocuments.IsGoodsReceiptAccurate IS NULL OR PurchaseOrdersInvoiceReceipt.InvoiceQuantity IS NULL,
-    'NotApplicable',
-    IFF(
-      PurchaseDocuments.IsGoodsReceiptAccurate
-      AND PurchaseDocuments.POQuantity_MENGE = PurchaseOrdersInvoiceReceipt.InvoiceQuantity,
-      'AccurateInvoice',
-      'InaccurateInvoice')
-  ) AS VendorInvoiceAccuracy,
-  -- Past Due and Open
-  IFF(
-    PurchaseDocuments.IsDelivered,
-    'NotApplicable',
-    IFF(
-      CURRENT_DATE() > PurchaseDocuments.ItemDeliveryDate_EINDT,
-      'PastDue',
-      'Open')
-  ) AS PastDueOrOpenItems
-FROM PurchaseDocuments
-LEFT JOIN
-  (
+  FiscalData AS (
+    SELECT
+      pd.Client_MANDT,
+      pd.DocumentNumber_EBELN,
+      pd.Item_EBELP,
+      sap_gold.Fiscal_Period(pd.Client_MANDT, c.FiscalyearVariant_PERIV, pd.PurchasingDocumentDate_BEDAT) AS FiscalPeriodResult,
+      c.FiscalyearVariant_PERIV
+    FROM PurchaseDocuments pd
+    JOIN sap_gold.CompaniesMD c
+      ON pd.Client_MANDT = c.Client_MANDT
+      AND pd.Company_BUKRS = c.CompanyCode_BUKRS
+  ),
+
+  PurchaseOrdersInvoiceReceipt AS (
     SELECT
       Client_MANDT,
       PurchasingDocumentNumber_EBELN,
       ItemNumberOfPurchasingDocument_EBELP,
       SUM(Quantity_MENGE) AS InvoiceQuantity,
       SUM(AmountInLocalCurrency_DMBTR) AS InvoiceAmountInSourceCurrency,
-      -- Invoice Date
       MAX(PostingDateInTheDocument_BUDAT) AS InvoiceDate,
       MAX(YearOfPostingDateInTheDocument_BUDAT) AS YearOfInvoiceDate,
       MAX(MonthOfPostingDateInTheDocument_BUDAT) AS MonthOfInvoiceDate,
       MAX(WeekOfPostingDateInTheDocument_BUDAT) AS WeekOfInvoiceDate,
-      -- Invoice Count
       COUNT(PurchasingDocumentNumber_EBELN) AS InvoiceCount
-    FROM
-      sap_gold.PurchaseDocumentsHistory
-    --## TransactioneventType_VGABE='2' -> Invoice Receipt
+    FROM sap_gold.PurchaseDocumentsHistory
     WHERE TransactioneventType_VGABE = '2'
     GROUP BY Client_MANDT, PurchasingDocumentNumber_EBELN, ItemNumberOfPurchasingDocument_EBELP
-  ) AS PurchaseOrdersInvoiceReceipt
-  ON
-    PurchaseDocuments.Client_MANDT = PurchaseOrdersInvoiceReceipt.Client_MANDT
-    AND PurchaseDocuments.DocumentNumber_EBELN = PurchaseOrdersInvoiceReceipt.PurchasingDocumentNumber_EBELN
-    AND PurchaseDocuments.Item_EBELP = PurchaseOrdersInvoiceReceipt.ItemNumberOfPurchasingDocument_EBELP
-LEFT JOIN CurrencyConversion
-  ON
-    PurchaseDocuments.Client_MANDT = CurrencyConversion.Client_MANDT
-    AND PurchaseDocuments.CurrencyKey_WAERS = CurrencyConversion.FromCurrency_FCURR
-    AND PurchaseDocuments.PurchasingDocumentDate_BEDAT = CurrencyConversion.ConvDate
+  )
 
-LEFT JOIN
-  sap_gold.PurchasingOrganizationsMD AS PurchasingOrganizations
-  ON
-    PurchaseDocuments.Client_MANDT = PurchasingOrganizations.Client_MANDT
-    AND PurchaseDocuments.PurchasingOrganization_EKORG = PurchasingOrganizations.PurchasingOrganization_EKORG
-LEFT JOIN
-  sap_gold.PurchasingGroupsMD AS PurchasingGroups
-  ON
-    PurchaseDocuments.Client_MANDT = PurchasingGroups.Client_MANDT
-    AND PurchaseDocuments.PurchasingGroup_EKGRP = PurchasingGroups.PurchasingGroup_EKGRP
-LEFT JOIN
-  sap_gold.VendorsMD AS Vendors
-  ON
-    PurchaseDocuments.Client_MANDT = Vendors.Client_MANDT
-    AND PurchaseDocuments.VendorAccountNumber_LIFNR = Vendors.AccountNumberOfVendorOrCreditor_LIFNR
-LEFT JOIN
-  sap_gold.CompaniesMD AS Companies
-  ON
-    PurchaseDocuments.Client_MANDT = Companies.Client_MANDT
-    AND PurchaseDocuments.Company_BUKRS = Companies.CompanyCode_BUKRS
-CROSS JOIN LanguageKey
-LEFT JOIN
-  sap_gold.MaterialsMD AS Materials
-  ON
-    PurchaseDocuments.Client_MANDT = Materials.Client_MANDT
-    AND PurchaseDocuments.MaterialNumber_MATNR = Materials.MaterialNumber_MATNR
-    AND Materials.Language_SPRAS = LanguageKey.LanguageKey_SPRAS
-LEFT JOIN
-  sap_gold.MaterialTypesMD AS MaterialTypes
-  ON
-    PurchaseDocuments.Client_MANDT = MaterialTypes.Client_MANDT
-    AND PurchaseDocuments.MaterialType_MTART = MaterialTypes.MaterialType_MTART
-    AND MaterialTypes.LanguageKey_SPRAS = LanguageKey.LanguageKey_SPRAS
+SELECT
+  pd.Client_MANDT,
+  pd.DocumentNumber_EBELN,
+  pd.Item_EBELP,
+  pd.PurchasingDocumentDate_BEDAT,
+  pd.NetOrderValueinPOCurrency_NETWR,
+  pd.CurrencyKey_WAERS,
+  pd.ItemDeliveryDate_EINDT,
+  pd.OrderDateOfScheduleLine_BEDAT,
+  pd.PostingDateInTheDocument_BUDAT,
+  pd.AmountInLocalCurrency_DMBTR,
+  pd.POOrderHistoryCurrencyKey_WAERS,
+  pd.POQuantity_MENGE,
+  pd.UoM_MEINS,
+  pd.NetPrice_NETPR,
+  pd.CreatedOn_AEDAT,
+  pd.Status_STATU,
+  pd.MaterialNumber_MATNR,
+  pd.MaterialType_MTART,
+  pd.MaterialGroup_MATKL,
+  pd.PurchasingOrganization_EKORG,
+  pd.PurchasingGroup_EKGRP,
+  pd.VendorAccountNumber_LIFNR,
+  pd.Company_BUKRS,
+  pd.Plant_WERKS,
+  pd.YearOfPurchasingDocumentDate_BEDAT,
+  pd.MonthOfPurchasingDocumentDate_BEDAT,
+  pd.WeekOfPurchasingDocumentDate_BEDAT,
+  --- Further inspectation is a must :)
+  -- CASE fd.FiscalPeriodResult
+  --   WHEN 'CASE1' THEN
+  --     SUBSTRING(sap_gold.Fiscal_Case1(pd.Client_MANDT, fd.FiscalyearVariant_PERIV, pd.PurchasingDocumentDate_BEDAT), 1, 4)
+  --   WHEN 'CASE2' THEN
+  --     SUBSTRING(sap_gold.Fiscal_Case2(pd.Client_MANDT, fd.FiscalyearVariant_PERIV, pd.PurchasingDocumentDate_BEDAT), 1, 4)
+  --   WHEN 'CASE3' THEN
+  --     SUBSTRING(sap_gold.Fiscal_Case3(pd.Client_MANDT, fd.FiscalyearVariant_PERIV, pd.PurchasingDocumentDate_BEDAT), 1, 4)
+  --   ELSE 'DATA ISSUE'
+  -- END AS FiscalYear,
+  -- CASE fd.FiscalPeriodResult
+  --   WHEN 'CASE1' THEN
+  --     SUBSTRING(sap_gold.Fiscal_Case1(pd.Client_MANDT, fd.FiscalyearVariant_PERIV, pd.PurchasingDocumentDate_BEDAT), 6, 2)
+  --   WHEN 'CASE2' THEN
+  --     SUBSTRING(sap_gold.Fiscal_Case2(pd.Client_MANDT, fd.FiscalyearVariant_PERIV, pd.PurchasingDocumentDate_BEDAT), 6, 2)
+  --   WHEN 'CASE3' THEN
+  --     SUBSTRING(sap_gold.Fiscal_Case3(pd.Client_MANDT, fd.FiscalyearVariant_PERIV, pd.PurchasingDocumentDate_BEDAT), 6, 2)
+  --   ELSE 'DATA ISSUE'
+  -- END AS FiscalPeriod,
+  poi.InvoiceQuantity,
+  poi.InvoiceAmountInSourceCurrency,
+  poi.InvoiceDate,
+  poi.YearOfInvoiceDate,
+  poi.MonthOfInvoiceDate,
+  poi.WeekOfInvoiceDate,
+  poi.InvoiceCount,
+  po.PurchasingOrganizationText_EKOTX,
+  pg.PurchasingGroupText_EKNAM,
+  v.CountryKey_LAND1,
+  v.NAME1,
+  c.CompanyText_BUTXT,
+  c.FiscalyearVariant_PERIV,
+  lk.LanguageKey_SPRAS,
+  m.MaterialText_MAKTX,
+  mt.DescriptionOfMaterialType_MTBEZ,
+  pd.VendorCycleTimeInDays,
+  pd.RejectedQuantity,
+  pd.GoodsReceiptQuantity,
+  pd.GoodsReceiptAmountInSourceCurrency,
+  cc.ExchangeRate_UKURS,
+  cc.ToCurrency_TCURR AS TargetCurrency_TCURR,
+  pd.AmountInLocalCurrency_DMBTR * cc.ExchangeRate_UKURS AS AmountInTargetCurrency_DMBTR,
+  pd.NetPrice_NETPR * cc.ExchangeRate_UKURS AS NetPriceInTargetCurrency_NETPR,
+  pd.NetOrderValueinPOCurrency_NETWR * cc.ExchangeRate_UKURS AS NetOrderValueinTargetCurrency_NETWR,
+  pd.GoodsReceiptAmountInSourceCurrency * cc.ExchangeRate_UKURS AS GoodsReceiptAmountInTargetCurrency,
+  poi.InvoiceAmountInSourceCurrency * cc.ExchangeRate_UKURS AS InvoiceAmountInTargetCurrency,
+  IFF(pd.IsDelivered, TRUE, FALSE) AS IsDelivered,
+  IFF(pd.IsRejected, TRUE, FALSE) AS IsRejected,
+  IFF(pd.IsDeliveredOnTime IS NULL, 'NotApplicable', IFF(pd.IsDeliveredOnTime, 'NotDelayed', 'Delayed')) AS VendorOnTimeDelivery,
+  IFF(pd.IsDeliveredInFull IS NULL, 'NotApplicable', IFF(pd.IsDeliveredInFull, 'DeliveredInFull', 'NotDeliveredInFull')) AS VendorInFullDelivery,
+  IFF(pd.IsDeliveredInFull IS NULL OR pd.IsDeliveredOnTime IS NULL, 'NotApplicable', IFF(pd.IsDeliveredInFull AND pd.IsDeliveredOnTime, 'OTIF', 'NotOTIF')) AS VendorOnTimeInFullDelivery,
+  IFF(pd.IsGoodsReceiptAccurate IS NULL OR poi.InvoiceQuantity IS NULL, 'NotApplicable', IFF(pd.IsGoodsReceiptAccurate AND pd.POQuantity_MENGE = poi.InvoiceQuantity, 'AccurateInvoice', 'InaccurateInvoice')) AS VendorInvoiceAccuracy,
+  IFF(pd.IsDelivered, 'NotApplicable', IFF(CURRENT_DATE() > pd.ItemDeliveryDate_EINDT, 'PastDue', 'Open')) AS PastDueOrOpenItems
+FROM PurchaseDocuments pd
+LEFT JOIN PurchaseOrdersInvoiceReceipt poi
+  ON pd.Client_MANDT = poi.Client_MANDT
+  AND pd.DocumentNumber_EBELN = poi.PurchasingDocumentNumber_EBELN
+  AND pd.Item_EBELP = poi.ItemNumberOfPurchasingDocument_EBELP
+LEFT JOIN CurrencyConversion cc
+  ON pd.Client_MANDT = cc.Client_MANDT
+  AND pd.CurrencyKey_WAERS = cc.FromCurrency_FCURR
+  AND pd.PurchasingDocumentDate_BEDAT = cc.ConvDate
+LEFT JOIN sap_gold.PurchasingOrganizationsMD po
+  ON pd.Client_MANDT = po.Client_MANDT
+  AND pd.PurchasingOrganization_EKORG = po.PurchasingOrganization_EKORG
+LEFT JOIN sap_gold.PurchasingGroupsMD pg
+  ON pd.Client_MANDT = pg.Client_MANDT
+  AND pd.PurchasingGroup_EKGRP = pg.PurchasingGroup_EKGRP
+LEFT JOIN sap_gold.VendorsMD v
+  ON pd.Client_MANDT = v.Client_MANDT
+  AND pd.VendorAccountNumber_LIFNR = v.AccountNumberOfVendorOrCreditor_LIFNR
+LEFT JOIN sap_gold.CompaniesMD c
+  ON pd.Client_MANDT = c.Client_MANDT
+  AND pd.Company_BUKRS = c.CompanyCode_BUKRS
+CROSS JOIN LanguageKey lk
+LEFT JOIN sap_gold.MaterialsMD m
+  ON pd.Client_MANDT = m.Client_MANDT
+  AND pd.MaterialNumber_MATNR = m.MaterialNumber_MATNR
+  AND m.Language_SPRAS = lk.LanguageKey_SPRAS
+LEFT JOIN sap_gold.MaterialTypesMD mt
+  ON pd.Client_MANDT = mt.Client_MANDT
+  AND pd.MaterialType_MTART = mt.MaterialType_MTART
+  AND mt.LanguageKey_SPRAS = lk.LanguageKey_SPRAS
+LEFT JOIN FiscalData fd
+  ON pd.Client_MANDT = fd.Client_MANDT
+  AND pd.DocumentNumber_EBELN = fd.DocumentNumber_EBELN
+  AND pd.Item_EBELP = fd.Item_EBELP;

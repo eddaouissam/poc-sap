@@ -568,4 +568,4 @@ LEFT JOIN
   ON
     PurchaseDocuments.Client_MANDT = MaterialTypes.Client_MANDT
     AND PurchaseDocuments.MaterialType_MTART = MaterialTypes.MaterialType_MTART
-    AND MaterialTypes.LanguageKey_SPRAS = LanguageKey.LanguageKey_SPRAS;
+    AND MaterialTypes.LanguageKey_SPRAS = LanguageKey.LanguageKey_SPRAS

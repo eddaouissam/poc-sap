@@ -142,5 +142,5 @@ LEFT JOIN sap_gold.currency_decimal AS currency_decimal
 --     AND currency_conversion.TCURR {{ currency }}
 -- ##CORTEX-CUSTOMER Modify the exchange rate type based on your requirement
 --     AND currency_conversion.KURST = 'M'
-LEFT JOIN `{{ project_id_src }}.{{ k9_datasets_processing }}.calendar_date_dim` AS CalendarDateDimension_FKDAT
+LEFT JOIN utils.calendar_date_dim AS CalendarDateDimension_FKDAT
   ON CalendarDateDimension_FKDAT.Date = VBRK.FKDAT

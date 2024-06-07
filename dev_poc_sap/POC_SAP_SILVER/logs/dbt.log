@@ -1,0 +1,44 @@
+[0m15:06:37.245916 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f3be2cadb40>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f3be115f580>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f3be115f520>]}
+
+
+============================== 15:06:37.249568 | bc3a0538-dd0a-44a4-bede-77f253d5c430 ==============================
+[0m15:06:37.249568 [info ] [MainThread]: Running with dbt=1.7.9
+[0m15:06:37.250378 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'fail_fast': 'False', 'debug': 'False', 'log_path': 'logs', 'profiles_dir': '/home/issam/.dbt', 'version_check': 'True', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'log_format': 'default', 'static_parser': 'True', 'introspect': 'True', 'invocation_command': 'dbt init', 'target_path': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'send_anonymous_usage_stats': 'True'}
+[0m15:06:52.245455 [debug] [MainThread]: Starter project path: /home/issam/dbt-venv/lib/python3.10/site-packages/dbt/include/starter_project
+[0m15:06:52.262311 [info ] [MainThread]: 
+Your new dbt project "poc_sap" was created!
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m15:06:52.262926 [info ] [MainThread]: Setting up your profile.
+[0m15:09:06.451737 [info ] [MainThread]: Profile poc_sap written to /home/issam/.dbt/profiles.yml using target's profile_template.yml and your supplied values. Run 'dbt debug' to validate the connection.
+[0m15:09:06.461661 [debug] [MainThread]: Resource report: {"command_name": "init", "command_success": true, "command_wall_clock_time": 149.26807, "process_user_time": 1.910294, "process_kernel_time": 0.150178, "process_mem_max_rss": "102060", "process_in_blocks": "176", "process_out_blocks": "88"}
+[0m15:09:06.463113 [debug] [MainThread]: Command `dbt init` succeeded at 15:09:06.462651 after 149.27 seconds
+[0m15:09:06.463959 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f3be2cadb40>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f3be115f5e0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f3be115eef0>]}
+[0m15:09:06.464685 [debug] [MainThread]: Flushing usage events
+[0m15:09:43.891360 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f4cc0cf1b40>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f4cbf1a3640>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f4cbf1a35e0>]}
+
+
+============================== 15:09:43.893837 | c4dbed2f-0d1a-45de-a12b-450db6be9f30 ==============================
+[0m15:09:43.893837 [info ] [MainThread]: Running with dbt=1.7.9
+[0m15:09:43.894778 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/home/issam/.dbt', 'fail_fast': 'False', 'debug': 'False', 'log_path': 'logs', 'version_check': 'True', 'warn_error': 'None', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'static_parser': 'True', 'log_format': 'default', 'introspect': 'True', 'target_path': 'None', 'invocation_command': 'dbt docs serve', 'send_anonymous_usage_stats': 'True'}
+[0m15:09:43.895294 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path /home/issam/poc_sap/dev_poc_sap/POC_SAP_SILVER/dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m15:09:43.896218 [debug] [MainThread]: Resource report: {"command_name": "serve", "command_wall_clock_time": 0.052636307, "process_user_time": 1.890826, "process_kernel_time": 0.040017, "process_mem_max_rss": "86788", "process_out_blocks": "16", "command_success": false, "process_in_blocks": "0"}
+[0m15:09:43.896878 [debug] [MainThread]: Command `dbt docs serve` failed at 15:09:43.896701 after 0.05 seconds
+[0m15:09:43.897348 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f4cc0cf1b40>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f4cbf1a36d0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f4cbf1a3610>]}
+[0m15:09:43.897827 [debug] [MainThread]: Flushing usage events

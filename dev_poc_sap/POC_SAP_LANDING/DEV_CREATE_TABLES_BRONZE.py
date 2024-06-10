@@ -45,11 +45,11 @@ def create_tables(session):
                 try:
                     session.sql(sql_create).collect()
                 except Exception as e:
-                    errors.append(f"Error creating table {current_table}: {str(e)} (")
+                    errors.append(f"Error creating table {current_table}: {str(e)}")
                 column_names.clear()  # Reset column tracking for the next table
 
             # Start new CREATE TABLE statement
-            sql_create = f"CREATE OR REPLACE TABLE DEV_DB_VISEO.SAP_BRONZE.{table_name} "
+            sql_create = f"CREATE OR REPLACE TABLE DEV_DB_VISEO.SAP_BRONZE.{table_name} ("
             current_table = table_name
 
         # Add column only if it hasn't been added yet

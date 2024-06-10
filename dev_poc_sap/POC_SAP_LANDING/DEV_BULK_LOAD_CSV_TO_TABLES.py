@@ -18,7 +18,8 @@ def load_data_automated(session: Session) -> str:
     messages = []
 
     # Retrieve all relevant tables from the specified schema
-    tables = session.sql(f"SHOW TABLES IN SCHEMA {target_schema} LIKE 'B_%';").collect()
+    tables = session.sql(f"SHOW TABLES IN SCHEMA {target_schema};").collect()
+    filtered_tables = [table for table in tables if table['name'].startswith('B_')]
 
     # Attempt to retrieve file list from the stage using the LIST command
     try:

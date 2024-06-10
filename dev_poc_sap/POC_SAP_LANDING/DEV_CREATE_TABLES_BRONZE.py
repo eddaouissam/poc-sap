@@ -19,7 +19,7 @@ Note:
   Modifications might be required based on specific database schema details or Snowflake account configurations.
   This script will be used for our POC, enabling us to create the SAP technical tables structure
 """
-
+ 
 from snowflake.snowpark import Session
 
 def create_tables(session):

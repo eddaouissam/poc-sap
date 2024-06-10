@@ -49,7 +49,8 @@ def create_tables(session):
                 column_names.clear()  # Reset column tracking for the next table
 
             # Start new CREATE TABLE statement
-            sql_create = f"DROP TABLE {table_name}"
+            sql_create = f"DROP TABLE {table_name} "
+            session.sql(sql_create).collect()
 
     # Return a message based on whether there were errors
     return "Errors: " + ", ".join(errors) if errors else "Tables created successfully."

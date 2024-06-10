@@ -57,7 +57,7 @@ def load_data_automated(session: Session) -> str:
 
 def run_load_data_automated(session: Session):
     load_data_automated(session)
-    return session.create_dataframe([[result]], schema=["result"])
+    return 'success'
 
 if __name__ == "__main__":
     session = Session.builder.getOrCreate()

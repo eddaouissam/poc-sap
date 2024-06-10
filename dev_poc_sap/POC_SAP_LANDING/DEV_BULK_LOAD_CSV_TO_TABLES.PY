@@ -1,14 +1,7 @@
-"""
-Script: Automated Data Loader
-Author: M'hamed Issam ED-DAOU
-Description:
-  This Snowpark Python script automates the process of loading data from specified files in a Snowflake stage into corresponding tables. 
-  It accounts for variations in naming conventions (e.g., underscores in table names but not in file names) by normalizing the names during processing. 
-  This functionality is crucial for environments with frequent data updates and where automated data loading needs to manage minor discrepancies in naming conventions between data storage (files) and database schema (tables).
-"""
+# File: load_data_automated.py
 from snowflake.snowpark import Session
 
-def load_data_automated(session: Session):
+def load_data_automated(session: Session) -> str:
     """
     Automatically loads data from files in a specified stage into tables with corresponding names in Snowflake,
     ignoring any 'B_' prefixes in the table names.
@@ -47,7 +40,7 @@ def load_data_automated(session: Session):
         if normalized_table_name in files:
             try:
                 copy_into_sql = f"""
-                COPY INTO {table_name_with_prefix}
+                COPY INTO DEV_DB_VISEO.SAP_BRONZE.{table_name_with_prefix}
                 FROM @{stage_name}/{files[normalized_table_name]}
                 FILE_FORMAT = (FORMAT_NAME = '{file_format_name}')
                 ON_ERROR = CONTINUE
@@ -61,3 +54,11 @@ def load_data_automated(session: Session):
             messages.append(f"No corresponding file found for table {table_name_with_prefix}.")
 
     return "\n".join(messages)
+
+def run_load_data_automated(session: Session):
+    load_data_automated(session)
+    return 'success'
+
+if __name__ == "__main__":
+    session = Session.builder.getOrCreate()
+    print(load_data_automated(session))

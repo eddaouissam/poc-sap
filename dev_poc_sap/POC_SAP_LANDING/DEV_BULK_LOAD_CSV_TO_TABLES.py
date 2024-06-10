@@ -14,10 +14,11 @@ def load_data_automated(session: Session) -> str:
     """
     stage_name = 'DEV_DB_VISEO.SAP_RAW_LANDING.SAP_CSV_FILES'
     file_format_name = 'DEV_DB_VISEO.SAP_RAW_LANDING.FF_CSV_SAP'
+    target_schema = 'DEV_DB_VISEO.SAP_BRONZE'
     messages = []
 
-    # Retrieve all relevant tables
-    tables = session.sql("SHOW TABLES LIKE 'B_%';").collect()
+    # Retrieve all relevant tables from the specified schema
+    tables = session.sql(f"SHOW TABLES IN SCHEMA {target_schema} LIKE 'B_%';").collect()
 
     # Attempt to retrieve file list from the stage using the LIST command
     try:
@@ -35,29 +36,27 @@ def load_data_automated(session: Session) -> str:
         normalized_table_name = table_name_with_prefix[2:].replace('_', '').upper() if table_name_with_prefix.startswith('B_') else table_name_with_prefix.replace('_', '').upper()
         
         # Corresponding file name expected in stage
-        file_name = normalized_table_name + '.csv'
-
         if normalized_table_name in files:
             try:
                 copy_into_sql = f"""
-                COPY INTO DEV_DB_VISEO.SAP_BRONZE.{table_name_with_prefix}
+                COPY INTO {target_schema}.{table_name_with_prefix}
                 FROM @{stage_name}/{files[normalized_table_name]}
                 FILE_FORMAT = (FORMAT_NAME = '{file_format_name}')
                 ON_ERROR = CONTINUE
                 MATCH_BY_COLUMN_NAME = CASE_INSENSITIVE;
                 """
                 session.sql(copy_into_sql).collect()
-                messages.append(f"Data successfully loaded into {table_name_with_prefix} from {files[normalized_table_name]}.")
+                messages.append(f"Data successfully loaded into {target_schema}.{table_name_with_prefix} from {files[normalized_table_name]}.")
             except Exception as e:
-                messages.append(f"Error loading data into {table_name_with_prefix}: {str(e)}")
+                messages.append(f"Error loading data into {target_schema}.{table_name_with_prefix}: {str(e)}")
         else:
-            messages.append(f"No corresponding file found for table {table_name_with_prefix}.")
+            messages.append(f"No corresponding file found for table {target_schema}.{table_name_with_prefix}.")
 
     return "\n".join(messages)
 
 def run_load_data_automated(session: Session):
-    load_data_automated(session)
-    return 'success'
+    result = load_data_automated(session)
+    return session.create_dataframe([[result]], schema=["result"])
 
 if __name__ == "__main__":
     session = Session.builder.getOrCreate()

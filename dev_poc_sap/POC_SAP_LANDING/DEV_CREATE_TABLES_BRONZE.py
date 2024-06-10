@@ -41,7 +41,7 @@ def create_tables(session):
         if current_table != table_name:
             if current_table is not None:
                 # Finish the previous table creation statement and execute it
-                #sql_create = sql_create.rstrip(", ") + ");"  # Remove the last comma and space, add closing parenthesis
+                sql_create = sql_create.rstrip(", ") + ");"  # Remove the last comma and space, add closing parenthesis
                 try:
                     session.sql(sql_create).collect()
                 except Exception as e:

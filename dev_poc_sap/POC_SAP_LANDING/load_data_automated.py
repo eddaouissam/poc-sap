@@ -40,7 +40,7 @@ def load_data_automated(session: Session) -> str:
         if normalized_table_name in files:
             try:
                 copy_into_sql = f"""
-                COPY INTO {table_name_with_prefix}
+                COPY INTO DEV_DB_VISEO.SAP_BRONZE.{table_name_with_prefix}
                 FROM @{stage_name}/{files[normalized_table_name]}
                 FILE_FORMAT = (FORMAT_NAME = '{file_format_name}')
                 ON_ERROR = CONTINUE

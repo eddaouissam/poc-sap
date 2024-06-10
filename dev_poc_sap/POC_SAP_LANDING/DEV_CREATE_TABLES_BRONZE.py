@@ -49,13 +49,13 @@ def create_tables(session):
                 column_names.clear()  # Reset column tracking for the next table
 
             # Start new CREATE TABLE statement
-            sql_create = f"DROP TABLE {table_name} "
+            sql_create = f"CREATE OR REPLACE TABLE {table_name} "
             current_table = table_name
 
         # Add column only if it hasn't been added yet
-        #if column_name not in column_names:
-         #   sql_create += f"{column_name} {column_type}, "
-          #  column_names.add(column_name)
+        if column_name not in column_names:
+            sql_create += f"{column_name} {column_type}, "
+            column_names.add(column_name)
 
     # Execute the last CREATE TABLE statement if any
     if sql_create:

@@ -56,7 +56,7 @@ def load_data_automated(session: Session) -> str:
     return "\n".join(messages)
 
 def run_load_data_automated(session: Session):
-    result = load_data_automated(session)
+    load_data_automated(session)
     return session.create_dataframe([[result]], schema=["result"])
 
 if __name__ == "__main__":

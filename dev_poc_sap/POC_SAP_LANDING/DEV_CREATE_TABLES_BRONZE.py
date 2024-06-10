@@ -59,7 +59,7 @@ def create_tables(session):
 
     # Execute the last CREATE TABLE statement if any
     if sql_create:
-        #sql_create = sql_create.rstrip(", ") + ");"  # Finalize the last table creation
+        sql_create = sql_create.rstrip(", ") + ");"  # Finalize the last table creation
         try:
             session.sql(sql_create).collect()
         except Exception as e:

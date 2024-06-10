@@ -45,25 +45,11 @@ def create_tables(session):
                 try:
                     session.sql(sql_create).collect()
                 except Exception as e:
-                    errors.append(f"Error creating table {table_name}: {str(e)}")
+                    errors.append(f"Error creating table {current_table}: {str(e)}")
                 column_names.clear()  # Reset column tracking for the next table
 
             # Start new CREATE TABLE statement
-            sql_create = f"DROP TABLE {table_name} ("
-            current_table = table_name
-
-        # Add column only if it hasn't been added yet
-        if column_name not in column_names:
-            sql_create += f"{column_name} {column_type}, "
-            column_names.add(column_name)
-
-    # Execute the last CREATE TABLE statement if any
-    if sql_create:
-        sql_create = sql_create.rstrip(", ") + ");"  # Finalize the last table creation
-        try:
-            session.sql(sql_create).collect()
-        except Exception as e:
-            errors.append(f"Error creating table {current_table}: {str(e)}")
+            sql_create = f"DROP TABLE {table_name}"
 
     # Return a message based on whether there were errors
     return "Errors: " + ", ".join(errors) if errors else "Tables created successfully."

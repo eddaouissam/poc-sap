@@ -1,0 +1,9 @@
+version: 2
+
+sources:
+  - name: silver_cdc_processed
+    database: dev_db_viseo
+    schema: sap_silver
+    tables:
+      - name: s_adrc
+      - name: s_kna1

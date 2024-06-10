@@ -45,7 +45,7 @@ def create_tables(session):
                 try:
                     session.sql(sql_create).collect()
                 except Exception as e:
-                    errors.append(f"Error creating table {current_table}: {str(e)}")
+                    errors.append(f"Error creating table {table_name}: {str(e)}")
                 column_names.clear()  # Reset column tracking for the next table
 
             # Start new CREATE TABLE statement

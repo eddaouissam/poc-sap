@@ -63,7 +63,7 @@ def create_tables(session):
         try:
             session.sql(sql_create).collect()
         except Exception as e:
-            errors.append(f"Error creating table {current_table}: {str(e)x
+            errors.append(f"Error creating table {current_table}: {str(e)}")
 
     # Return a message based on whether there were errors
     return "Errors: " + ", ".join(errors) if errors else "Tables created successfully."

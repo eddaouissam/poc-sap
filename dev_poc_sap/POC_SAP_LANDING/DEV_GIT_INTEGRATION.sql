@@ -5,6 +5,7 @@
 -- This secret uses a password type authentication with the specified username and personal access token
 -- The username is the GitHub account email
 -- The password is a GitHub personal access token with the necessary permissions
+use role accountadmin;
 CREATE OR REPLACE SECRET DEV_DB_VISEO.SAP_RAW_LANDING.git_secret
   TYPE = password
   USERNAME = 'eddaouissam@gmail.com'

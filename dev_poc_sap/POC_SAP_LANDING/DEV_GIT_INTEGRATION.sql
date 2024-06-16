@@ -5,6 +5,9 @@
 -- The allowed prefixes specify which GitHub URL prefixes are permitted for this integration
 -- Authentication secrets (git_secret) are allowed for this integration
 -- The integration is enabled upon creation
+
+use role accountadmin;
+
 CREATE OR REPLACE API INTEGRATION DEV_DB_VISEO.SAP_RAW_LANDING.git_integration_poc
   API_PROVIDER = git_https_api
   API_ALLOWED_PREFIXES = ('https://github.com/eddaouissam')

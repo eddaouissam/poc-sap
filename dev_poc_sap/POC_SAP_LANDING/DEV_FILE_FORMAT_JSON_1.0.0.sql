@@ -9,7 +9,7 @@
 --   error-free loading of schema descriptions directly into Snowflake.
 --   The format also uses automatic compression detection to optimize storage and transfer speeds.
 
-CREATE OR REPLACE FILE FORMAT FF_JSON_SCHEMAS
+CREATE OR REPLACE FILE FORMAT DEV_DB_VISEO.SAP_RAW_LANDING.FF_JSON_SCHEMAS
   TYPE = 'JSON', -- Specifies the file type to be JSON.
   STRIP_OUTER_ARRAY = TRUE, -- Enables stripping of the outer JSON array, useful for JSON files that contain a single array of objects.
   COMPRESSION = 'AUTO'; -- Automatically detects and applies the optimal compression method for the files being loaded.

@@ -1,9 +1,11 @@
+-- Script: DEV_GIT_INTEGRATION.sql
+-- Author: M'hamed Issam ED-DAOU
 -- Create an API integration named 'git_integration_poc' that integrates with a Git provider (GitHub in this case)
 -- The API provider is specified as 'git_https_api' for HTTPS Git API access
 -- The allowed prefixes specify which GitHub URL prefixes are permitted for this integration
 -- Authentication secrets (git_secret) are allowed for this integration
 -- The integration is enabled upon creation
-CREATE OR REPLACE API INTEGRATION git_integration_poc
+CREATE OR REPLACE API INTEGRATION DEV_DB_VISEO.SAP_RAW_LANDING.git_integration_poc
   API_PROVIDER = git_https_api
   API_ALLOWED_PREFIXES = ('https://github.com/eddaouissam')
   ALLOWED_AUTHENTICATION_SECRETS = (git_secret)
@@ -13,10 +15,10 @@ CREATE OR REPLACE API INTEGRATION git_integration_poc
 -- This secret uses a password type authentication with the specified username and personal access token
 -- The username is the GitHub account email
 -- The password is a GitHub personal access token with the necessary permissions
-CREATE OR REPLACE SECRET git_secret
+CREATE OR REPLACE SECRET DEV_DB_VISEO.SAP_RAW_LANDING.git_secret
   TYPE = password
-  USERNAME = 'XXXXXXXXXXXXXXXXX'
-  PASSWORD = 'XXXXXXXXXXX';
+  USERNAME = 'eddaouissam@gmail.com'
+  PASSWORD = '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';
 
 -- Create a Git repository reference named 'git_repo_stage' within the specified schema (DEV_DB_VISEO.SAP_RAW_LANDING)
 -- The API integration used for this repository is 'git_integration_poc'

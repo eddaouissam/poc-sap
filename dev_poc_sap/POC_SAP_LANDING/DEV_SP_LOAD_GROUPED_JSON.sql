@@ -38,11 +38,4 @@ $$
         (file_format => :file_format);
 $$;
 
--- Usage Example:
--- The following example demonstrates how to call the `create_grouped_schemas` procedure
--- using a specific stage location and file format.
 
-CALL create_grouped_schemas(
-    '@DEV_DB_VISEO.SAP_RAW_LANDING.SAP_JSON_SCHEMAS',
-    'ff_json_schemas'
-);

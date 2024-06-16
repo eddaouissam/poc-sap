@@ -14,7 +14,7 @@
 --   - stage_location (STRING): The stage location where the JSON files reside.
 --   - file_format (STRING): The file format to use for parsing the JSON files.
 
-CREATE OR REPLACE PROCEDURE create_grouped_schemas(
+CREATE OR REPLACE PROCEDURE DEV_DB_VISEO.SAP_RAW_LANDING.create_grouped_schemas(
     stage_location STRING,
     file_format STRING
 )

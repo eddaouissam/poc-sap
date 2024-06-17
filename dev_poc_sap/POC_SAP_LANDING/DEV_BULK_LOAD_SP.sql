@@ -16,7 +16,7 @@
 
 use database DEV_DB_VISEO;
 use schema SAP_RAW_LANDING;
-use warehouse = 'DEV_WH'
+use warehouse = 'DEV_WH';
 CREATE OR REPLACE PROCEDURE BULK_LOAD_SP()
 RETURNS VARCHAR(16777216)
 LANGUAGE PYTHON

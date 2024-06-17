@@ -33,16 +33,16 @@ jobs:
 
       - name: Deploy Stored Procedure To Create Silver Structure
         run: |
-          ~/bin/snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_CREATE_SILVER_SP.sql -o friendly=false
+          ~/bin/snowsql -f dev_poc_sap/POC_SAP_BRONZE/DEV_CREATE_SILVER_SP.sql -o friendly=false
 
       - name: Deploy Stored Procedure for the Automated MERGE
         run: |
-          ~/bin/snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_SAP_MERGE_SP.sql -o friendly=false
+          ~/bin/snowsql -f dev_poc_sap/POC_SAP_BRONZE/DEV_SAP_MERGE_SP.sql -o friendly=false
 
       - name: Deploy Stored Procedure for the BRONZE TO SILVER Transformation
         run: |
-          ~/bin/snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_TRANSFORM_BRONZE_TO_SILVER_SP.sql -o friendly=false
+          ~/bin/snowsql -f dev_poc_sap/POC_SAP_BRONZE/DEV_TRANSFORM_BRONZE_TO_SILVER_SP.sql -o friendly=false
 
       - name: Deploy Task for Bronze To Silver Orchestrated
         run: |
-          ~/bin/snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_BRONZE_TO_SILVER_TASK.sql -o friendly=false
+          ~/bin/snowsql -f dev_poc_sap/POC_SAP_BRONZE/DEV_BRONZE_TO_SILVER_TASK.sql -o friendly=false

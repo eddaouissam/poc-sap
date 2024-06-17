@@ -36,7 +36,7 @@ def create_tables(session):
         source_table = row['SOURCE_TABLE']
         column_name = row['NAME']
         column_type = row['TYPE']
-        table_name = 'B_'+source_table.replace('_SCHEMA', '')
+        table_name = 'B_'+source_table.replace('.GZ_SCHEMA', '')
 
         if current_table != table_name:
             if current_table is not None:

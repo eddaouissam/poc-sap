@@ -16,8 +16,9 @@ CREATE OR REPLACE SECRET DEV_DB_VISEO.SAP_RAW_LANDING.git_secret
 -- The allowed prefixes specify which GitHub URL prefixes are permitted for this integration
 -- Authentication secrets (git_secret) are allowed for this integration
 -- The integration is enabled upon creation
-
-CREATE OR REPLACE API INTEGRATION DEV_DB_VISEO.SAP_RAW_LANDING.git_integration_poc
+use database DEV_DB_VISEO;
+use schema SAP_RAW_LANDING;
+CREATE OR REPLACE API INTEGRATION git_integration_poc
   API_PROVIDER = git_https_api
   API_ALLOWED_PREFIXES = ('https://github.com/eddaouissam')
   ALLOWED_AUTHENTICATION_SECRETS = (git_secret)

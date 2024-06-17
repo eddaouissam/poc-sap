@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - '.github/workflows/deploy_sap_raw_landing.yml'
-#      - 'dev_poc_sap/POC_SAP_LANDING/**'
+      - 'dev_poc_sap/POC_SAP_LANDING/**'
   workflow_dispatch:
 
 jobs:

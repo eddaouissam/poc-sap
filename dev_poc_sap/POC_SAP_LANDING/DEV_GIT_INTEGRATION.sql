@@ -38,7 +38,7 @@ CREATE OR REPLACE SECRET DEV_DB_VISEO.SAP_RAW_LANDING.git_secret
 -- The Git credentials (authentication) used are specified by 'git_secret'
 -- The origin specifies the URL of the GitHub repository to be integrated
 CREATE OR REPLACE GIT REPOSITORY DEV_DB_VISEO.SAP_RAW_LANDING.git_repo_stage
-  API_INTEGRATION = DEV_DB_VISEO.SAP_RAW_LANDING.git_integration_poc
+  API_INTEGRATION = git_integration_poc
   GIT_CREDENTIALS = DEV_DB_VISEO.SAP_RAW_LANDING.git_secret
   ORIGIN = 'https://github.com/eddaouissam/poc_sap';
 

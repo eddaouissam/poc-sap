@@ -1,0 +1,48 @@
+name: Workflow to Deploy SAP_RAW_LANDING Schema Objects
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/deploy_sap_bronze.yml'
+      - 'dev_poc_sap/POC_SAP_BRONZE/**'
+  workflow_dispatch:
+
+jobs:
+  deploy_sap_raw_landing:
+    runs-on: ubuntu-latest
+
+    env:
+      SNOWSQL_PWD: ${{ secrets.SNOWFLAKE_PASSWORD }}
+      SNOWSQL_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+      SNOWSQL_USER: ${{ secrets.SNOWFLAKE_USERNAME }}
+      SNOWSQL_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
+      SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
+      SNOWSQL_ROLE: ${{ secrets.SNOWFLAKE_ROLE }}
+      SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install SnowSQL
+        run: |
+          curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
+          SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
+
+      - name: Deploy Stored Procedure To Create Silver Structure
+        run: |
+          ~/bin/snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_CREATE_SILVER_SP.sql -o friendly=false
+
+      - name: Deploy Stored Procedure for the Automated MERGE
+        run: |
+          ~/bin/snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_SAP_MERGE_SP.sql -o friendly=false
+
+      - name: Deploy Stored Procedure for the BRONZE TO SILVER Transformation
+        run: |
+          ~/bin/snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_TRANSFORM_BRONZE_TO_SILVER_SP.sql -o friendly=false
+
+      - name: Deploy Task for Bronze To Silver Orchestrated
+        run: |
+          ~/bin/snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_BRONZE_TO_SILVER_TASK.sql -o friendly=false

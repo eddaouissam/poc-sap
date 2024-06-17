@@ -13,7 +13,10 @@
 --   - This Stored Proc will be called later in a TASK call to orchestrate the workflow.
 -- Example:
 --   CALL BULK_LOAD_SP();
-CREATE OR REPLACE PROCEDURE DEV_DB_VISEO.SAP_RAW_LANDING.BULK_LOAD_SP()
+
+use database DEV_DB_VISEO;
+use schema SAP_RAW_LANDING;
+CREATE OR REPLACE PROCEDURE BULK_LOAD_SP()
 RETURNS VARCHAR(16777216)
 LANGUAGE PYTHON
 RUNTIME_VERSION = '3.8'

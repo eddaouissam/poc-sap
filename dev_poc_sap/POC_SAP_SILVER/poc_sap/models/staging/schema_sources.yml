@@ -2,8 +2,24 @@ version: 2
 
 sources:
   - name: silver_cdc_processed
-    database: dev_db_viseo
+    database: DEV_DB_VISEO
     schema: sap_silver
     tables:
       - name: s_adrc
       - name: s_kna1
+      - name: s_tcurc
+      - name: s_tcurx
+      - name: s_mara
+      - name: s_makt
+      - name: s_t134t
+      - name: s_t134
+      - name: s_lfa1
+      - name: s_ekpo
+      - name: s_ekko
+      - name: s_ekbe
+      - name: s_t024e
+  - name: utils
+    database: DEV_DB_VISEO
+    schema: utils
+    tables:
+      - name: calendar_date_dim

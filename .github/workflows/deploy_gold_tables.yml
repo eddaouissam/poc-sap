@@ -45,5 +45,5 @@ jobs:
             table_name=$(basename "$sql_file" .sql)
             SQL_QUERY=$(cat "$sql_file")
             echo "Creating or replacing table $table_name"
-            ~/bin/snowsql -q "CREATE OR REPLACE TABLE SAP_GOLD.$table_name AS ${SQL_QUERY};" -o friendly=false
+            ~/bin/snowsql -q "use warehouse DEV_WH; CREATE OR REPLACE TABLE SAP_GOLD.$table_name AS ${SQL_QUERY};" -o friendly=false
           done

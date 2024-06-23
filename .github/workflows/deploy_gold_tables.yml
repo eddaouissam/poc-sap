@@ -32,18 +32,17 @@ jobs:
         run: |
           curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
           SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
-          
-      - name: Deploy all SQL files to Snowflake
+      - name: Create or replace tables in Snowflake
         run: |
-          sql_files=$(find dev_poc_sap/POC_SAP_SILVER/Tables -name '*.sql')
-          if [ -z "$sql_files" ]; then
-            echo "No SQL files found."
+          changed_sql_files=$(git diff --name-only HEAD~1 HEAD | grep 'dev_poc_sap/POC_SAP_SILVER/Tables.*\.sql' || true)
+          if [ -z "$changed_sql_files" ]; then
+            echo "No SQL files changed."
             exit 0
           fi
-          for sql_file in $sql_files; do
+          for sql_file in $changed_sql_files; do
             echo "Processing $sql_file"
             table_name=$(basename "$sql_file" .sql)
             SQL_QUERY=$(cat "$sql_file")
             echo "Creating or replacing table $table_name"
-            ~/bin/snowsql -q "use warehouse DEV_WH; CREATE OR REPLACE TABLE SAP_GOLD.$table_name AS ${SQL_QUERY};" -o friendly=false
+            ~/bin/snowsql -q "CREATE TABLE IF NOT EXISTS SAP_GOLD.$table_name AS ${SQL_QUERY};" -o friendly=false
           done

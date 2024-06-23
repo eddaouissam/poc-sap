@@ -1,6 +1,6 @@
 -- Create schemas for data marts
 CREATE SCHEMA IF NOT EXISTS DEV_DB_VISEO.VENDOR_PERFORMANCE;
-
+ 
 
 -- Clone tables from SAP_GOLD to VENDOR_PERFORMANCE data mart
 CREATE TABLE DEV_DB_VISEO.VENDOR_PERFORMANCE.countries_flag CLONE DEV_DB_VISEO.SAP_GOLD.countries_flag; -- NOT FOUND !!!!

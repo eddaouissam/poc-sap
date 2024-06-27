@@ -10,4 +10,4 @@ AS '
                Ip_Koart, Ip_ZFBDT, Ip_BLDAT, Ip_Shkzg, Ip_REBZG, Ip_ZBD3T, Ip_ZBD2T, Ip_ZBD1T
              )
          END
-';
+'; 

@@ -53,17 +53,22 @@ jobs:
           SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
           SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
 
-      - name: Change directory to dbt project
-        run: cd poc_sap/dev_poc_sap/POC_SAP_SILVER/poc_sap
-
       - name: Run dbt debug
         run: dbt debug
+        working-directory: poc_sap/dev_poc_sap/POC_SAP_SILVER/poc_sap
 
       - name: Run dbt deps
         run: dbt deps
+        working-directory: poc_sap/dev_poc_sap/POC_SAP_SILVER/poc_sap
+
+      - name: Run dbt seed
+        run: dbt seed
+        working-directory: poc_sap/dev_poc_sap/POC_SAP_SILVER/poc_sap
 
       - name: Run dbt run
         run: dbt run
+        working-directory: poc_sap/dev_poc_sap/POC_SAP_SILVER/poc_sap
 
       - name: Run dbt test
         run: dbt test
+        working-directory: poc_sap/dev_poc_sap/POC_SAP_SILVER/poc_sap

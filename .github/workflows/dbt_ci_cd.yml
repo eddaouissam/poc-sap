@@ -41,7 +41,8 @@ jobs:
                 database: $SNOWFLAKE_DATABASE
                 warehouse: $SNOWFLAKE_WAREHOUSE
                 schema: $SNOWFLAKE_SCHEMA
-                threads: 4
+                threads: 1
+                client_session_keep_alive: False
           " > ~/.dbt/profiles.yml
         env:
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
@@ -51,6 +52,9 @@ jobs:
           SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
           SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
           SNOWFLAKE_SCHEMA: ${{ secrets.SNOWFLAKE_SCHEMA }}
+
+      - name: Change directory to dbt project
+        run: cd poc_sap/dev_poc_sap/POC_SAP_SILVER/poc_sap
 
       - name: Run dbt debug
         run: dbt debug

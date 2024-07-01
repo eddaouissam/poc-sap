@@ -10,7 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
       - name: know the dir
         run: pwd
       - name: list the subdir
-        run: ls ..
+        run: ls -a

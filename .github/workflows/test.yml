@@ -10,5 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: test
+      - name: know the dir
         run: pwd
+      - name: list the subdir
+        run: ls

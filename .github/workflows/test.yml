@@ -13,4 +13,4 @@ jobs:
       - name: know the dir
         run: pwd
       - name: list the subdir
-        run: ls -a
+        run: ls ..

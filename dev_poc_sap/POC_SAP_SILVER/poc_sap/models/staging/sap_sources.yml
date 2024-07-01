@@ -1,0 +1,91 @@
+version: 2
+
+sources:
+  - name: silver_cdc_processed
+    database: DEV_DB_VISEO
+    schema: sap_silver
+    tables:
+      - name: s_t161
+      - name: s_t881t
+      - name: s_vbap
+      - name: s_cskt
+      - name: s_tspat
+      - name: s_vbrp
+      - name: s_kna1
+      - name: s_tvkot
+      - name: s_t179t
+      - name: s_mch1
+      - name: s_t006a
+      - name: s_t005
+      - name: s_afpo
+      - name: s_afko
+      - name: s_cepct
+      - name: s_mbew
+      - name: s_t001
+      - name: s_ekko
+      - name: s_lfa1
+      - name: s_t001l
+      - name: s_t157e
+      - name: s_likp
+      - name: s_tvlst
+      - name: s_tcurc
+      - name: s_ekpo
+      - name: s_tvko
+      - name: s_vbup
+      - name: s_t023t
+      - name: s_setheadert
+      - name: s_adrt
+      - name: s_adrc
+      - name: s_t024
+      - name: s_csks
+      - name: s_adr6
+      - name: s_vbuk
+      - name: s_t002
+      - name: s_lips
+      - name: s_tvtwt
+      - name: s_vbak
+      - name: s_marc
+      - name: s_t156t
+      - name: s_tvtw
+      - name: s_ekbe
+      - name: s_tspa
+      - name: s_aufk
+      - name: s_jest
+      - name: s_t001w
+      - name: s_t134
+      - name: s_ekes
+      - name: s_t005t
+      - name: s_bkpf
+      - name: s_tcurx
+      - name: s_tvarvc
+      - name: s_t161t
+      - name: s_t005s
+      - name: s_mbewh
+      - name: s_t006
+      - name: s_vbep
+      - name: s_t134t
+      - name: s_t148t
+      - name: s_vbrk
+      - name: s_tj02t
+      - name: s_t006t
+      - name: s_makt
+      - name: s_t881
+      - name: s_bseg
+      - name: s_eket
+      - name: s_t005k
+      - name: s_t023
+      - name: s_vbpa
+      - name: s_mara
+      - name: s_t001k
+      - name: s_konv
+      - name: s_tcurt
+      - name: s_adrct
+      - name: s_t179
+      - name: s_cepc
+      - name: s_t024e
+      - name: s_tvfst
+  - name: utils
+    database: DEV_DB_VISEO
+    schema: utils
+    tables:
+      - name: calendar_date_dim

@@ -87,12 +87,12 @@ SELECT
   CalendarDateDimension_BLDAT.CalMonth AS MonthOfDocumentDateInDocument_BLDAT,
   CalendarDateDimension_BLDAT.CalWeek AS WeekOfDocumentDateInDocument_BLDAT,
   CalendarDateDimension_BLDAT.CalQuarter AS QuarterOfDocumentDateInDocument_BLDAT,
-  -- COALESCE(ekbe.DMBTR * currency_decimal.CURRFIX, ekbe.DMBTR) AS AmountInLocalCurrency_DMBTR,
-  -- COALESCE(ekbe.WRBTR * currency_decimal.CURRFIX, ekbe.WRBTR) AS AmountInDocumentCurrency_WRBTR
+  COALESCE(ekbe.DMBTR * currency_decimal.CURRFIX, ekbe.DMBTR) AS AmountInLocalCurrency_DMBTR,
+  COALESCE(ekbe.WRBTR * currency_decimal.CURRFIX, ekbe.WRBTR) AS AmountInDocumentCurrency_WRBTR
 FROM
   {{ source('silver_cdc_processed', 's_ekbe') }} AS ekbe
--- LEFT JOIN utils.currency_decimal AS currency_decimal
---   ON ekbe.WAERS = currency_decimal.CURRKEY
+LEFT JOIN {{ ref('currency_decimal') }} AS currency_decimal
+  ON ekbe.WAERS = currency_decimal.CURRKEY
 LEFT JOIN {{ source('utils', 'calendar_date_dim') }}  AS CalendarDateDimension_BUDAT
   ON CalendarDateDimension_BUDAT.Date = ekbe.BUDAT
 LEFT JOIN {{ source('utils', 'calendar_date_dim') }}  AS CalendarDateDimension_BLDAT

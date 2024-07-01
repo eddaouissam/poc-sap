@@ -383,20 +383,20 @@ SELECT
   CalendarDateDimension_BEDAT.CalMonth AS MonthOfPurchasingDocumentDate_BEDAT,
   CalendarDateDimension_BEDAT.CalWeek AS WeekOfPurchasingDocumentDate_BEDAT,
   CalendarDateDimension_BEDAT.CalQuarter AS QuarterOfPurchasingDocumentDate_BEDAT,
-  -- COALESCE(ekpo.NETPR * currency_decimal.CURRFIX, ekpo.NETPR) AS NetPrice_NETPR,
-  -- COALESCE(ekpo.NETWR * currency_decimal.CURRFIX, ekpo.NETWR) AS NetOrderValueinPOCurrency_NETWR,
-  -- COALESCE(ekpo.BRTWR * currency_decimal.CURRFIX, ekpo.BRTWR) AS GrossOrderValueinPOcurrency_BRTWR,
-  -- COALESCE(ekpo.ZWERT * currency_decimal.CURRFIX, ekpo.ZWERT) AS TargetValueforOutlineAgreementinDocumentCurrency_ZWERT,
-  -- COALESCE(ekpo.EFFWR * currency_decimal.CURRFIX, ekpo.EFFWR) AS Effectivevalueofitem_EFFWR,
-  -- COALESCE(ekpo.GNETWR * currency_decimal.CURRFIX, ekpo.GNETWR) AS Currentlynotused_GNETWR,
-  -- COALESCE(ekpo.BONBA * currency_decimal.CURRFIX, ekpo.BONBA) AS Rebatebasis1_BONBA
+  COALESCE(ekpo.NETPR * currency_decimal.CURRFIX, ekpo.NETPR) AS NetPrice_NETPR,
+  COALESCE(ekpo.NETWR * currency_decimal.CURRFIX, ekpo.NETWR) AS NetOrderValueinPOCurrency_NETWR,
+  COALESCE(ekpo.BRTWR * currency_decimal.CURRFIX, ekpo.BRTWR) AS GrossOrderValueinPOcurrency_BRTWR,
+  COALESCE(ekpo.ZWERT * currency_decimal.CURRFIX, ekpo.ZWERT) AS TargetValueforOutlineAgreementinDocumentCurrency_ZWERT,
+  COALESCE(ekpo.EFFWR * currency_decimal.CURRFIX, ekpo.EFFWR) AS Effectivevalueofitem_EFFWR,
+  COALESCE(ekpo.GNETWR * currency_decimal.CURRFIX, ekpo.GNETWR) AS Currentlynotused_GNETWR,
+  COALESCE(ekpo.BONBA * currency_decimal.CURRFIX, ekpo.BONBA) AS Rebatebasis1_BONBA
 
 FROM {{ source('silver_cdc_processed', 's_ekpo') }} AS ekpo
 INNER JOIN {{ source('silver_cdc_processed', 's_ekko') }} AS ekko
   ON ekko.MANDT = ekpo.MANDT
     AND ekko.EBELN = ekpo.EBELN
--- LEFT JOIN ............ AS currency_decimal
---   ON ekko.WAERS = currency_decimal.CURRKEY
+LEFT JOIN {{ ref('currency_decimal') }} AS currency_decimal
+  ON ekko.WAERS = currency_decimal.CURRKEY
 LEFT JOIN {{ source('utils', 'calendar_date_dim') }} AS CalendarDateDimension_AEDAT
   ON CalendarDateDimension_AEDAT.Date = ekko.AEDAT
 LEFT JOIN {{ source('utils', 'calendar_date_dim') }}  AS CalendarDateDimension_BEDAT

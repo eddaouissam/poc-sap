@@ -1,0 +1,5 @@
+version: 2
+models:
+- name: CustomerClearedItems_BSAD
+  description: ''
+  columns: []

@@ -1,0 +1,13 @@
+version: 2
+models:
+- name: BillingBlockingReasonsMD
+  description: 'Billing: Blocking reasons texts'
+  columns:
+  - name: Client_MANDT
+    description: Client (Mandant)
+  - name: LanguageKey_SPRAS
+    description: Language Key
+  - name: Block_FAKSP
+    description: Block
+  - name: BillingBlockReason_VTEXT
+    description: Billing block desc.

@@ -1,0 +1,25 @@
+version: 2
+models:
+- name: MaterialPlantsMD
+  description: MaterialPlantsMD
+  columns:
+  - name: Client_MANDT
+    description: Client (Mandant)
+  - name: MaterialNumber_MATNR
+    description: Material
+  - name: Plant_WERKS
+    description: Plant
+  - name: MaintainanceStatus_PSTAT
+    description: Maintenance status
+  - name: FlagMaterialForDeletionAtPlantLevel_LVORM
+    description: DF at plant level
+  - name: ValuationCategory_BWTTY
+    description: Valuation Category
+  - name: BatchManagementIndicator_XCHAR
+    description: Batch management
+  - name: PlantSpecificMaterialStatus_MMSTA
+    description: Plant-sp.matl status
+  - name: DateFromWhichThePlantsSpecificMaterialStatusIsValid_MMSTD
+    description: Valid from
+  - name: SafetyStock_EISBE
+    description: Safety Stock

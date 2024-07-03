@@ -1,0 +1,21 @@
+version: 2
+models:
+- name: currency_conversion
+  description: ''
+  columns:
+  - name: mandt
+    description: Client (Mandant)
+  - name: kurst
+    description: Exchange rate type
+  - name: fcurr
+    description: From currency
+  - name: tcurr
+    description: To-currency
+  - name: ukurs
+    description: Exchange Rate
+  - name: start_date
+    description: start
+  - name: end_date
+    description: end
+  - name: conv_date
+    description: conv

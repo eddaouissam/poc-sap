@@ -1,0 +1,13 @@
+version: 2
+models:
+- name: Languages_T002
+  description: Languages (T002)
+  columns:
+  - name: LanguageKey_SPRAS
+    description: Language Key
+  - name: LanguageSpecifications_LASPEZ
+    description: Language specifications
+  - name: DegreeOfTranslationOfLanguage_LAHQ
+    description: Degree of Translation of Lang.
+  - name: TwoCharacterSapLanguageCode_LAISO
+    description: Lang. (ISO 639)

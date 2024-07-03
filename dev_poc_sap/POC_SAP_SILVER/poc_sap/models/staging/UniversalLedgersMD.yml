@@ -1,0 +1,37 @@
+version: 2
+models:
+- name: UniversalLedgersMD
+  description: Text for Universal Ledgers
+  columns:
+  - name: Client_MANDT
+    description: Client (Mandant)
+  - name: Ledger_RLDNR
+    description: Ledger
+  - name: Language_LANGU
+    description: Language Key
+  - name: Name_NAME
+    description: Ledger Name
+  - name: LedgerType
+    description: Ledger Type
+  - name: OwnerApplication_APPL
+    description: Application
+  - name: SubApplication_SUBAPPL
+    description: Subapplication
+  - name: LeadingLedgerIndicator_XLEADING
+    description: Leading Ledger
+  - name: ValuationView_VALUTYP
+    description: Valuation
+  - name: CashLedgerIndicator_XCASH_LEDGER
+    description: Cash Ledger
+  - name: Currency_GCURR
+    description: Ledger currency
+  - name: CompanyCurrencyRole_CLASS
+    description: Ledger class
+  - name: LogicalSystem_LOGSYS
+    description: Logical System
+  - name: AddlCurrRole1_CURT1
+    description: LC currency type
+  - name: AddlCurrRole2_CURT2
+    description: GC currency type
+  - name: AddlCurrRole3_CURT3
+    description: Curr type - curr 4

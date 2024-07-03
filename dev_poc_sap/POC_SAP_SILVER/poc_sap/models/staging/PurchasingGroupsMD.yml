@@ -1,0 +1,11 @@
+version: 2
+models:
+- name: PurchasingGroupsMD
+  description: Purchasing Groups Text
+  columns:
+  - name: Client_MANDT
+    description: Client (Mandant)
+  - name: PurchasingGroup_EKGRP
+    description: Purchasing Group
+  - name: PurchasingGroupText_EKNAM
+    description: Description p. group

@@ -1,0 +1,15 @@
+version: 2
+models:
+- name: PurchaseDocumentTypesMD
+  description: Purchase Document Types Text
+  columns:
+  - name: Client_MANDT
+    description: Client (Mandant)
+  - name: PurchasingDocumentType_BSART
+    description: Purchasing Doc. Type
+  - name: PurchasingDocumentCategory_BSTYP
+    description: Purch. doc. category
+  - name: PurchasingDocumentTypeText_BATXT
+    description: Doc. Type Descript.
+  - name: Language_SPRAS
+    description: Language Key

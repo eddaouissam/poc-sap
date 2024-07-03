@@ -1,0 +1,9 @@
+version: 2
+models:
+- name: currency_decimal
+  description: ''
+  columns:
+  - name: CURRKEY
+    description: CURRKEY
+  - name: CURRFIX
+    description: CURRFIX

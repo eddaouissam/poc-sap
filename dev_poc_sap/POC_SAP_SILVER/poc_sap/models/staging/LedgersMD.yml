@@ -1,0 +1,33 @@
+version: 2
+models:
+- name: LedgersMD
+  description: General Ledger Master Data
+  columns:
+  - name: Client_MANDT
+    description: Client (Mandant)
+  - name: Ledger_RLDNR
+    description: Ledger
+  - name: Currency_GCURR
+    description: Ledger currency
+  - name: CompanyCurrencyRole_CLASS
+    description: Ledger class
+  - name: LogicalSystem_LOGSYS
+    description: Logical System
+  - name: ControllingValuationType_VALUTYP
+    description: Valuation
+  - name: LeadingLedgerFlag_XLEADING
+    description: Leading Ledger
+  - name: LedgerApplication_APPL
+    description: Application
+  - name: LedgerSubapplication_SUBAPPL
+    description: Subapplication
+  - name: AddlCurrRole1_CURT1
+    description: LC currency type
+  - name: AddlCurrRole2_CURT2
+    description: GC currency type
+  - name: AddlCurrRole3_CURT3
+    description: Curr type - curr 4
+  - name: Language_LANGU
+    description: Language Key
+  - name: Name
+    description: Ledger Name

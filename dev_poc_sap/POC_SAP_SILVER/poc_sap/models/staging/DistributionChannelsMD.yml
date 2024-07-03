@@ -1,0 +1,13 @@
+version: 2
+models:
+- name: DistributionChannelsMD
+  description: Distribution Channel Details
+  columns:
+  - name: Client_MANDT
+    description: Client (Mandant)
+  - name: DistributionChannel_VTWEG
+    description: Distribution Channel
+  - name: Language_SPRAS
+    description: Language Key
+  - name: DistributionChannelName_VTEXT
+    description: Name

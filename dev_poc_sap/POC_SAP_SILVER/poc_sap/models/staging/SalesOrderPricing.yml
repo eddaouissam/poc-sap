@@ -1,0 +1,23 @@
+version: 2
+models:
+- name: SalesOrderPricing
+  description: Sales Orders Pricing
+  columns:
+  - name: Client_MANDT
+    description: Client (Mandant)
+  - name: NumberOfTheDocumentCondition_KNUMV
+    description: Doc. condition no.
+  - name: ConditionItemNumber_KPOSN
+    description: Item
+  - name: ConditionValueCurrencyKey_WAERS
+    description: Currency
+  - name: Checkbox_KDATU
+    description: Conditn pricing date
+  - name: ListPrice
+    description: List Price
+  - name: AdjustedPrice
+    description: Adjusted Price
+  - name: Discount
+    description: Discount
+  - name: InterCompanyPrice
+    description: Inter Company Price

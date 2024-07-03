@@ -1,0 +1,17 @@
+version: 2
+models:
+- name: CostCenterHierarchiesMD
+  description: Text for Cost Center Hierarchy
+  columns:
+  - name: Client_MANDT
+    description: Client (Mandant)
+  - name: SetClass_SETCLASS
+    description: Set class
+  - name: OrganizationalUnit_SUBCLASS
+    description: Organizational Unit
+  - name: SetName_SETNAME
+    description: Set Name
+  - name: LanguageKey_LANGU
+    description: Language Key
+  - name: ShortDescriptionOfSet_DESCRIPT
+    description: Description

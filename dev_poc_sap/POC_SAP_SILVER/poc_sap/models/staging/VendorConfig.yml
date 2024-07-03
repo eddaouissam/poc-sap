@@ -1,0 +1,13 @@
+version: 2
+models:
+- name: VendorConfig
+  description: Vendor Config
+  columns:
+  - name: Client_MANDT
+    description: Client (Mandant)
+  - name: NameOfVariantVariable_NAME
+    description: Variable Name
+  - name: LowField_LOW
+    description: Field Value
+  - name: HighField_HIGH
+    description: Field Value

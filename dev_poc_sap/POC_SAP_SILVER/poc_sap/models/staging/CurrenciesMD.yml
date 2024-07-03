@@ -1,0 +1,19 @@
+version: 2
+models:
+- name: CurrenciesMD
+  description: Currencies Master Data
+  columns:
+  - name: Client_MANDT
+    description: Client (Mandant)
+  - name: CurrencyCode_WAERS
+    description: Currency
+  - name: CurrencyISO_ISOCD
+    description: ISO Code
+  - name: CurrencyDecimals_CURRDEC
+    description: Decimals
+  - name: Language
+    description: Language
+  - name: CurrShortText_KTEXT
+    description: Short text
+  - name: CurrLongText_LTEXT
+    description: Long Text

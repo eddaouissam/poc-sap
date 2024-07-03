@@ -1,0 +1,20 @@
+version: 2
+models:
+- name: OneTouchOrder
+  description: Find if a sales order and its delviery were created and not updated.
+    This view depends on the RAW datasets to contain history. Comment it out from
+    SalesOrders* if the RAW dataset is not available. Replace or update with CDPOS
+    if this history is required.
+  columns:
+  - name: VBAPClient_MANDT
+    description: Client (Mandant)
+  - name: VBAPSalesDocument_VBELN
+    description: Billing Document
+  - name: VBAPSalesDocument_Item_POSNR
+    description: Item
+  - name: VBAPTotalOrder_KWMENG
+    description: Order Quantity
+  - name: ActualBilledQuantity_FKIMG
+    description: Billed Quantity
+  - name: OneTouchOrderCount
+    description: One Touch Order Count

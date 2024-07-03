@@ -1,0 +1,17 @@
+version: 2
+models:
+- name: MaterialTypesMD
+  description: Material Types and texts
+  columns:
+  - name: Client_MANDT
+    description: Client (Mandant)
+  - name: MaterialType_MTART
+    description: Material Type
+  - name: ReferenceMaterialType_MTREF
+    description: Ref. material type
+  - name: ScreenReferenceDependingOnTheMaterialType_MBREF
+    description: 'SRef: material type'
+  - name: LanguageKey_SPRAS
+    description: Language Key
+  - name: DescriptionOfMaterialType_MTBEZ
+    description: Material type descr.

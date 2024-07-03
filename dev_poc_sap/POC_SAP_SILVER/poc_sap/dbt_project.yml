@@ -34,8 +34,6 @@ models:
   poc_sap:
     # Config indicated by + and applies to all files under models/example/
     staging:
+      +transient: false
       +schema: SAP_GOLD
       +materialized: table
-    marts:
-      +schema: ORDER_TO_CASH
-      +materialized: view

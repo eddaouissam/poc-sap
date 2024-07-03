@@ -1,0 +1,13 @@
+version: 2
+models:
+- name: StorageLocationsMD
+  description: StorageLocations Text
+  columns:
+  - name: Client_MANDT
+    description: Client (Mandant)
+  - name: Plant_WERKS
+    description: Plant
+  - name: StorageLocation_LGORT
+    description: Storage Location
+  - name: StorageLocationText_LGOBE
+    description: Descr. of Storage Loc.

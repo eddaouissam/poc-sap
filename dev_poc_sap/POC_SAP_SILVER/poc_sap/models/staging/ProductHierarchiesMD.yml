@@ -1,0 +1,15 @@
+version: 2
+models:
+- name: ProductHierarchiesMD
+  description: Product Hierarchies Master Data
+  columns:
+  - name: Client_MANDT
+    description: Client (Mandant)
+  - name: Hierarchy_PRODH
+    description: Product Hierarchy
+  - name: Level_STUFE
+    description: Level number
+  - name: Language_SPRAS
+    description: Language Key
+  - name: Description_VTEXT
+    description: Description

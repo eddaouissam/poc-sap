@@ -9,7 +9,7 @@ on:
     paths:
       - '.github/workflows/dbt_ci_cd.yml'
       - 'dev_poc_sap/POC_SAP_SILVER/poc_sap/**'
-    workflow_dispatch:
+  workflow_dispatch:
 jobs:
   deploy:
     runs-on: ubuntu-latest

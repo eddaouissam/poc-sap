@@ -1,11 +1,11 @@
 name: CI/CD for dbt Project
 
 on:
+  schedule:
+    - cron: '*/5 * * * *' # Runs every 5 minutes :°)
   push:
     branches:
       - main
-    schedule:
-    - cron: '*/5 * * * *' # Runs every 5 minutes :°)
     paths:
       - '.github/workflows/dbt_ci_cd.yml'
       - 'dev_poc_sap/POC_SAP_SILVER/poc_sap/**'

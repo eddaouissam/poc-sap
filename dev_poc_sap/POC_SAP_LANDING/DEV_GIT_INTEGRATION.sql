@@ -24,15 +24,6 @@ CREATE OR REPLACE API INTEGRATION git_integration_poc
   ALLOWED_AUTHENTICATION_SECRETS = (git_secret)
   ENABLED = TRUE;
 
--- Create a secret named 'git_secret' for authentication
--- This secret uses a password type authentication with the specified username and personal access token
--- The username is the GitHub account email
--- The password is a GitHub personal access token with the necessary permissions
-CREATE OR REPLACE SECRET DEV_DB_VISEO.SAP_RAW_LANDING.git_secret
-  TYPE = password
-  USERNAME = 'eddaouissam@gmail.com'
-  PASSWORD = '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';
-
 -- Create a Git repository reference named 'git_repo_stage' within the specified schema (DEV_DB_VISEO.SAP_RAW_LANDING)
 -- The API integration used for this repository is 'git_integration_poc'
 -- The Git credentials (authentication) used are specified by 'git_secret'

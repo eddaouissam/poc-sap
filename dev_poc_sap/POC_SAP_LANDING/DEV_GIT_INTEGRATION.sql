@@ -9,7 +9,7 @@ use role accountadmin;
 CREATE OR REPLACE SECRET DEV_DB_VISEO.SAP_RAW_LANDING.git_secret
   TYPE = password
   USERNAME = 'eddaouissam@gmail.com'
-  PASSWORD = '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';
+  PASSWORD = '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';
 
 -- Create an API integration named 'git_integration_poc' that integrates with a Git provider (GitHub in this case)
 -- The API provider is specified as 'git_https_api' for HTTPS Git API access

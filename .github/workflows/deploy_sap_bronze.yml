@@ -1,4 +1,4 @@
-name: Workflow to Deploy SAP_RAW_LANDING Schema Objects
+name: Workflow to Deploy SAP_BRONZE Schema Objects
 
 on:
   push:

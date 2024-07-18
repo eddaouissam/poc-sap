@@ -32,8 +32,8 @@ def load_data_automated(session: Session) -> str:
     # Attempt to retrieve file list from the stage using the LIST command
     try:
         files_in_stage = session.sql(f"LIST @{stage_name};").collect()
-        # Normalize file names by removing underscores and converting to uppercase
-        files = {file['name'].split('/')[-1].replace('_', '').split('.')[0].upper(): file['name'].split('/')[-1] for file in files_in_stage}
+        # Normalize file names by removing underscores and converting to uppercase, without file extension
+        files = {file['name'].split('/')[-1].split('.')[0].replace('_', '').upper(): file['name'].split('/')[-1].split('.')[0] for file in files_in_stage}
     except Exception as e:
         return f"Error accessing stage {stage_name}: {str(e)}"
 

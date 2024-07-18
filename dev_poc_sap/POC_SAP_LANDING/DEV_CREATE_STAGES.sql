@@ -7,11 +7,11 @@
 -- Create a stage for storing CSV files
 -- Stage Name: SAP_CSV_FILES
 -- DIRECTORY: This option enables hierarchical directory support within the stage.
-CREATE OR REPLACE STAGE DEV_DB_VISEO.SAP_RAW_LANDING.SAP_CSV_FILES 
+CREATE STAGE IF NOT EXISTS DEV_DB_VISEO.SAP_RAW_LANDING.SAP_CSV_FILES 
     DIRECTORY = ( ENABLE = true );
 
 -- Create a stage for storing JSON schema files
 -- Stage Name: SAP_JSON_SCHEMAS
 -- DIRECTORY: This option enables hierarchical directory support within the stage.
-CREATE OR REPLACE STAGE DEV_DB_VISEO.SAP_RAW_LANDING.SAP_JSON_SCHEMAS 
+CREATE STAGE IF NOT EXISTS DEV_DB_VISEO.SAP_RAW_LANDING.SAP_JSON_SCHEMAS 
     DIRECTORY = ( ENABLE = true );

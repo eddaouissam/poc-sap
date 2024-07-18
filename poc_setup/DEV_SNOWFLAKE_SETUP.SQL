@@ -13,11 +13,13 @@ USE ROLE sysadmin;
 CREATE DATABASE IF NOT EXISTS DEV_DB_VISEO;
 CREATE WAREHOUSE DEV_WH WITH WAREHOUSE_SIZE = 'X-SMALL';
 
--- Step 2: Create Schemas for Different Data Stages
+-- Step 2: Create Schemas for Different Data Stages and drop the public schema
+DROP SCHEMA IF EXISTS DEV_DB_VISEO.PUBLIC;
+CREATE SCHEMA IF NOT EXISTS DEV_DB_VISEO.SAP_RAW_LANDING;
 CREATE SCHEMA IF NOT EXISTS DEV_DB_VISEO.SAP_BRONZE;
 CREATE SCHEMA IF NOT EXISTS DEV_DB_VISEO.SAP_SILVER;
 CREATE SCHEMA IF NOT EXISTS DEV_DB_VISEO.SAP_GOLD;
-CREATE SCHEMA IF NOT EXISTS DEV_DB_VISEO.SAP_RAW_LANDING;
+CREATE SCHEMA IF NOT EXISTS DEV_DB_VISEO.UTILS;
 
 -- Switch to Securityadmin role for role creation and management
 USE ROLE securityadmin;
@@ -34,9 +36,9 @@ GRANT ROLE CUSTOM_VISEO TO ROLE SYSADMIN;
 -- Revert to Sysadmin role to set up grants
 USE ROLE sysadmin;
 
--- Step 5: Display current grants on newly created database and warehouse
-SHOW GRANTS ON DATABASE DEV_DB_VISEO;
-SHOW GRANTS ON WAREHOUSE DEV_WH;
+-- Step 5: Display current grants on newly created database and warehouse (These steps can be used to troubleshoot or to monitor)
+-- SHOW GRANTS ON DATABASE DEV_DB_VISEO;
+-- SHOW GRANTS ON WAREHOUSE DEV_WH;
 
 -- Step 6: Grant Necessary Privileges to Roles
 -- Allow DEV_VISEO role to use the warehouse and access the database and schemas
@@ -51,8 +53,8 @@ GRANT ALL ON SCHEMA DEV_DB_VISEO.SAP_RAW_LANDING TO ROLE DEV_VISEO;
 GRANT ALL ON SCHEMA DEV_DB_VISEO.SAP_GOLD TO ROLE DEV_VISEO;
 GRANT ALL ON SCHEMA DEV_DB_VISEO.SAP_GOLD TO ROLE CUSTOM_VISEO;
 
--- Step 7: Check Role Grants and User Overview
-SHOW GRANTS TO ROLE DEV_VISEO;
-SHOW USERS;
+-- Step 7: Check Role Grants and User Overview (Troubleshoot // Monitor)
+-- SHOW GRANTS TO ROLE DEV_VISEO;
+-- SHOW USERS;
 
 -- End of script

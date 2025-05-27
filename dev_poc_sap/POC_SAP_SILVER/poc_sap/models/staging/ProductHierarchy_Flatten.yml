@@ -1,0 +1,11 @@
+version: 2
+models:
+- name: ProductHierarchy_Flatten
+  description: Product Hierarchy Flattener
+  columns:
+  - name: prodh1
+    description: prodh1
+  - name: prodh2
+    description: prodh2
+  - name: prodh3
+    description: prodh3

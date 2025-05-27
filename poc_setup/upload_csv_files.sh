@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Definir schema de la source et le stage
-source_path="/////"
+source_path="/mnt/c/Temp/CSV_FILES"
 stage_path="@SAP_CSV_FILES"
 
 # Boucle pour chaque fichier present

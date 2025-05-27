@@ -1,0 +1,31 @@
+version: 2
+models:
+- name: StockInHand
+  description: Calculation of Stock In Hand as the aggregated unrestricted stock Qty
+    from various sources like stock at Distribution centers, at Vendor location, at
+    Customer Location and special stock at Vendor in Consignment.
+  columns:
+  - name: Client_MANDT
+    description: Client (Mandant)
+  - name: ArticleNumber_MATNR
+    description: Material
+  - name: Site_WERKS
+    description: Plant
+  - name: StorageLocation_LGORT
+    description: Storage Location
+  - name: BatchNumber_CHARG
+    description: Batch
+  - name: SpecialStockIndicator_SOBKZ
+    description: Special Stock
+  - name: SDDocumentNumber_VBELN
+    description: Sales Document
+  - name: SDDocumentItemNumber_POSNR
+    description: Item (SD)
+  - name: VendorAccountNumber_LIFNR
+    description: Vendor
+  - name: CustomerNumber_KUNNR
+    description: Customer
+  - name: Qty
+    description: Qty
+  - name: StockType
+    description: Stock Type

@@ -1,0 +1,8 @@
+version: 2
+models:
+- name: SalesOrderDetails_SAMPLE
+  description: View for sample Looker Studio report. If interested in the report,
+    please contact cortex-support@google.com.
+  columns:
+  - name: Customer
+    description: ''

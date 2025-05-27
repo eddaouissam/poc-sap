@@ -1,0 +1,15 @@
+version: 2
+models:
+- name: Regions_T005S
+  description: Regions (T005S)
+  columns:
+  - name: Client_MANDT
+    description: Client (Mandant)
+  - name: CountryKey_LAND1
+    description: Country Key
+  - name: Region_BLAND
+    description: Region
+  - name: ProvincialTaxCode_FPRCD
+    description: Provincial tax code
+  - name: StateOfManufacture_HERBL
+    description: State of manufacture

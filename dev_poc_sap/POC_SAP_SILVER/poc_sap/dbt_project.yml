@@ -37,3 +37,5 @@ models:
       +transient: false
       +schema: SAP_GOLD
       +materialized: table
+      +tags:
+        - "staging"

@@ -1,0 +1,29 @@
+version: 2
+models:
+- name: MaterialLedger
+  description: Material Ledger
+  columns:
+  - name: Client_MANDT
+    description: Client (Mandant)
+  - name: MaterialNumber_MATNR
+    description: Material
+  - name: ValuationType_BWTAR
+    description: Valuation Type
+  - name: ValuationArea_BWKEY
+    description: Valuation Area
+  - name: PriceUnit_PEINH
+    description: Price unit
+  - name: PostingPeriod
+    description: Posting Period
+  - name: FiscalYear
+    description: Fiscal Year
+  - name: PriceControlIndicator_VPRSV
+    description: Price control
+  - name: StandardCost_STPRS
+    description: Standard price
+  - name: ValueOfTotalValuatedStock_SALK3
+    description: Total Value
+  - name: MovingAveragePrice
+    description: Moving Average Price
+  - name: CurrencyKey_WAERS
+    description: Currency

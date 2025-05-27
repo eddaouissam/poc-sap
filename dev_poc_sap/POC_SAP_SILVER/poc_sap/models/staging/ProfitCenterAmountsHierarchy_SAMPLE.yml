@@ -1,0 +1,6 @@
+version: 2
+models:
+- name: ProfitCenterAmountsHierarchy_SAMPLE
+  description: Sample view using Python-based profit center hierarchy flattener (local
+    k9). Not meant to be deployed.
+  columns: []

@@ -1,0 +1,30 @@
+[0m14:56:29.431716 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f06dbb7a7d0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f06dc277b50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f06dc2773d0>]}
+
+
+============================== 14:56:29.434377 | c01bef67-5b59-49eb-bb27-376222696374 ==============================
+[0m14:56:29.434377 [info ] [MainThread]: Running with dbt=1.7.9
+[0m14:56:29.434971 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'debug': 'False', 'version_check': 'True', 'log_path': 'logs', 'fail_fast': 'False', 'profiles_dir': '/home/issam/.dbt', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'log_format': 'default', 'introspect': 'True', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'invocation_command': 'dbt list', 'target_path': 'None', 'static_parser': 'True', 'send_anonymous_usage_stats': 'True'}
+[0m14:56:29.435394 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path /home/issam/poc_sap/dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m14:56:29.436418 [debug] [MainThread]: Resource report: {"command_name": "list", "command_wall_clock_time": 0.041255083, "process_user_time": 1.326277, "process_kernel_time": 0.030142, "process_mem_max_rss": "86856", "process_out_blocks": "8", "command_success": false, "process_in_blocks": "0"}
+[0m14:56:29.436918 [debug] [MainThread]: Command `dbt list` failed at 14:56:29.436808 after 0.04 seconds
+[0m14:56:29.437208 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f06dbb7a7d0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f06dc275300>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f06dc276f20>]}
+[0m14:56:29.437537 [debug] [MainThread]: Flushing usage events
+[0m17:16:18.268763 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f8ce50224a0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f8ce36c5480>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f8ce36c5420>]}
+
+
+============================== 17:16:18.274022 | 25ac219a-6233-444d-8fa7-7480eb60adf4 ==============================
+[0m17:16:18.274022 [info ] [MainThread]: Running with dbt=1.8.3
+[0m17:16:18.274463 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'fail_fast': 'False', 'profiles_dir': '/home/issam/.dbt', 'log_path': 'logs', 'version_check': 'True', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'None', 'quiet': 'False', 'no_print': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'invocation_command': 'dbt run-operation generate_source --args {"schema_name": "sap_silver", "include_descriptions": true}', 'static_parser': 'True', 'introspect': 'True', 'target_path': 'None', 'log_format': 'default', 'send_anonymous_usage_stats': 'True'}
+[0m17:16:18.274818 [error] [MainThread]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path /home/issam/poc_sap/dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m17:16:18.275384 [debug] [MainThread]: Resource report: {"command_name": "run-operation", "command_wall_clock_time": 0.0429194, "process_user_time": 0.827473, "process_kernel_time": 0.049254, "process_mem_max_rss": "83772", "process_in_blocks": "8", "process_out_blocks": "8", "command_success": false}
+[0m17:16:18.275798 [debug] [MainThread]: Command `dbt run-operation` failed at 17:16:18.275726 after 0.04 seconds
+[0m17:16:18.276065 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f8ce50224a0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f8ce36c5510>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f8ce36c5450>]}
+[0m17:16:18.276336 [debug] [MainThread]: Flushing usage events

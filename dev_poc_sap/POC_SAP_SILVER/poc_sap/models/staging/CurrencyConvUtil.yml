@@ -1,0 +1,29 @@
+version: 2
+models:
+- name: CurrencyConvUtil
+  description: Utility View for Currency Conversion (materialized recommended)
+  columns:
+  - name: Client_mandt
+    description: Client (Mandant)
+  - name: SourceCurrency_FCURR
+    description: From currency
+  - name: TargetCurrency_TCURR
+    description: To-currency
+  - name: DateFROM
+    description: Date FROM
+  - name: DateTo
+    description: Date To
+  - name: FFACT
+    description: Ratio (from)
+  - name: TFACT
+    description: Ratio (to)
+  - name: FROMCurrDecimal
+    description: FROM Curr Decimal
+  - name: toCurrDecimal
+    description: to Curr Decimal
+  - name: ConversionFactor
+    description: Conversion Factor
+  - name: validFROMDate
+    description: valid FROM Date
+  - name: validToDate
+    description: valid To Date

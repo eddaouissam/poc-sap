@@ -4,86 +4,262 @@ sources:
   - name: silver_cdc_processed
     database: DEV_DB_VISEO
     schema: sap_silver
+    description: "Filtered SAP Technical Tables from SAP_SILVER schema"
     tables:
-      - name: s_t161
-      - name: s_t881t
-      - name: s_vbap
-      - name: s_cskt
-      - name: s_tspat
-      - name: s_vbrp
-      - name: s_kna1
-      - name: s_tvkot
-      - name: s_t179t
-      - name: s_mch1
-      - name: s_t006a
-      - name: s_t005
-      - name: s_afpo
-      - name: s_afko
-      - name: s_cepct
-      - name: s_mbew
-      - name: s_t001
-      - name: s_ekko
-      - name: s_lfa1
-      - name: s_t001l
-      - name: s_t157e
-      - name: s_likp
-      - name: s_tvlst
-      - name: s_tcurc
-      - name: s_ekpo
-      - name: s_tvko
-      - name: s_vbup
-      - name: s_t023t
-      - name: s_setheadert
-      - name: s_adrt
-      - name: s_adrc
-      - name: s_t024
-      - name: s_csks
       - name: s_adr6
-      - name: s_vbuk
-      - name: s_t002
-      - name: s_lips
-      - name: s_tvtwt
-      - name: s_vbak
-      - name: s_marc
-      - name: s_t156t
-      - name: s_tvtw
-      - name: s_ekbe
-      - name: s_tspa
-      - name: s_aufk
-      - name: s_jest
-      - name: s_t001w
-      - name: s_t134
-      - name: s_ekes
-      - name: s_t005t
-      - name: s_bkpf
-      - name: s_tcurx
-      - name: s_tvarvc
-      - name: s_t161t
-      - name: s_t005s
-      - name: s_mbewh
-      - name: s_t006
-      - name: s_vbep
-      - name: s_t134t
-      - name: s_t148t
-      - name: s_vbrk
-      - name: s_tj02t
-      - name: s_t006t
-      - name: s_makt
-      - name: s_t881
-      - name: s_bseg
-      - name: s_eket
-      - name: s_t005k
-      - name: s_t023
-      - name: s_vbpa
-      - name: s_mara
-      - name: s_t001k
-      - name: s_konv
-      - name: s_tcurt
+        description: ""
+      - name: s_adrc
+        description: ""
       - name: s_adrct
-      - name: s_t179
+        description: ""
+      - name: s_adrt
+        description: ""
+      - name: s_afko
+        description: ""
+      - name: s_afpo
+        description: ""
+      - name: s_ankt
+        description: ""
+      - name: s_anla
+        description: ""
+      - name: s_aufk
+        description: ""
+      - name: s_bkpf
+        description: ""
+      - name: s_bseg
+        description: ""
+      - name: s_but000
+        description: ""
+      - name: s_but020
+        description: ""
       - name: s_cepc
+        description: ""
+      - name: s_cepc_hier
+        description: ""
+      - name: s_cepct
+        description: ""
+      - name: s_ckmlcr
+        description: ""
+      - name: s_ckmlhd
+        description: ""
+      - name: s_csks
+        description: ""
+      - name: s_csks_hier
+        description: ""
+      - name: s_cskt
+        description: ""
+      - name: s_currency_conversion
+        description: ""
+      - name: s_currency_decimal
+        description: ""
+      - name: s_dd03l
+        description: ""
+      - name: s_dd07t
+        description: ""
+      - name: s_ekbe
+        description: ""
+      - name: s_ekes
+        description: ""
+      - name: s_eket
+        description: ""
+      - name: s_ekkn
+        description: ""
+      - name: s_ekko
+        description: ""
+      - name: s_ekpo
+        description: ""
+      - name: s_faglflexa
+        description: ""
+      - name: s_jest
+        description: ""
+      - name: s_kna1
+        description: ""
+      - name: s_konv
+        description: ""
+      - name: s_lfa1
+        description: ""
+      - name: s_likp
+        description: ""
+      - name: s_lips
+        description: ""
+      - name: s_makt
+        description: ""
+      - name: s_mara
+        description: ""
+      - name: s_marc
+        description: ""
+      - name: s_mard
+        description: ""
+      - name: s_mast
+        description: ""
+      - name: s_mbew
+        description: ""
+      - name: s_mbewh
+        description: ""
+      - name: s_mch1
+        description: ""
+      - name: s_mcha
+        description: ""
+      - name: s_mkol
+        description: ""
+      - name: s_monthly_inventory_aggregation
+        description: ""
+      - name: s_mseg
+        description: ""
+      - name: s_msfd
+        description: ""
+      - name: s_mska
+        description: ""
+      - name: s_msku
+        description: ""
+      - name: s_mslb
+        description: ""
+      - name: s_prod_hierarchy_texts
+        description: ""
+      - name: s_prps
+        description: ""
+      - name: s_rbco
+        description: ""
+      - name: s_rbkp
+        description: ""
+      - name: s_retail_recommender
+        description: ""
+      - name: s_rseg
+        description: ""
+      - name: s_setheadert
+        description: ""
+      - name: s_setleaf
+        description: ""
+      - name: s_setnode
+        description: ""
+      - name: s_ska1
+        description: ""
+      - name: s_skat
+        description: ""
+      - name: s_stas
+        description: ""
+      - name: s_stko
+        description: ""
+      - name: s_stock_monthly_snapshots
+        description: ""
+      - name: s_stock_weekly_snapshots
+        description: ""
+      - name: s_stpo
+        description: ""
+      - name: s_t001
+        description: ""
+      - name: s_t001k
+        description: ""
+      - name: s_t001l
+        description: ""
+      - name: s_t001w
+        description: ""
+      - name: s_t002
+        description: ""
+      - name: s_t005
+        description: ""
+      - name: s_t005k
+        description: ""
+      - name: s_t005s
+        description: ""
+      - name: s_t005t
+        description: ""
+      - name: s_t006
+        description: ""
+      - name: s_t006a
+        description: ""
+      - name: s_t006t
+        description: ""
+      - name: s_t009
+        description: ""
+      - name: s_t009b
+        description: ""
+      - name: s_t023
+        description: ""
+      - name: s_t023t
+        description: ""
+      - name: s_t024
+        description: ""
       - name: s_t024e
+        description: ""
+      - name: s_t134
+        description: ""
+      - name: s_t134t
+        description: ""
+      - name: s_t148t
+        description: ""
+      - name: s_t156t
+        description: ""
+      - name: s_t157e
+        description: ""
+      - name: s_t161
+        description: ""
+      - name: s_t161t
+        description: ""
+      - name: s_t179
+        description: ""
+      - name: s_t179t
+        description: ""
+      - name: s_t881
+        description: ""
+      - name: s_t881t
+        description: ""
+      - name: s_tcurc
+        description: ""
+      - name: s_tcurf
+        description: ""
+      - name: s_tcurr
+        description: ""
+      - name: s_tcurt
+        description: ""
+      - name: s_tcurx
+        description: ""
+      - name: s_tj02t
+        description: ""
+      - name: s_tj20t
+        description: ""
+      - name: s_tka02
+        description: ""
+      - name: s_tspa
+        description: ""
+      - name: s_tspat
+        description: ""
+      - name: s_tvarvc
+        description: ""
+      - name: s_tvfs
+        description: ""
       - name: s_tvfst
+        description: ""
+      - name: s_tvko
+        description: ""
+      - name: s_tvkot
+        description: ""
+      - name: s_tvlst
+        description: ""
+      - name: s_tvtw
+        description: ""
+      - name: s_tvtwt
+        description: ""
+      - name: s_vbak
+        description: ""
+      - name: s_vbap
+        description: ""
+      - name: s_vbep
+        description: ""
+      - name: s_vbfa
+        description: ""
+      - name: s_vbpa
+        description: ""
+      - name: s_vbrk
+        description: ""
+      - name: s_vbrp
+        description: ""
+      - name: s_vbuk
+        description: ""
+      - name: s_vbup
+        description: ""
+      - name: s_weekly_inventory_aggregation
+        description: "TEST"
   - name: utils
     database: DEV_DB_VISEO
     schema: utils

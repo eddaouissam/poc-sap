@@ -11,7 +11,7 @@ on:
 
 jobs:
   deploy_sap_raw_landing:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     env:
       SNOWSQL_PWD: ${{ secrets.SNOWFLAKE_PASSWORD }}
@@ -28,45 +28,49 @@ jobs:
 
       - name: Install SnowSQL
         run: |
-          curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
-          SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
+          mkdir -p ~/bin
+          curl -O "https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.28-linux_x86_64.bash"
+          export SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile
+          bash snowsql-1.2.28-linux_x86_64.bash
+          echo "${HOME}/bin" >> $GITHUB_PATH
+          chmod +x ~/bin/snowsql
 
       - name: Deploy Create Stages
         run: |
-          ~/bin/snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_CREATE_STAGES.sql -o friendly=false
+          snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_CREATE_STAGES.sql -o friendly=false -o log_level=DEBUG
 
       - name: Deploy Git Integration Object
         run: |
-          ~/bin/snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_GIT_INTEGRATION.sql -o friendly=false
+          snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_GIT_INTEGRATION.sql -o friendly=false -o log_level=DEBUG
 
       - name: Deploy File Formats JSON
         run: |
-          ~/bin/snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_FILE_FORMAT_JSON_1.0.0.sql -o friendly=false
+          snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_FILE_FORMAT_JSON_1.0.0.sql -o friendly=false -o log_level=DEBUG
 
       - name: Deploy File Formats CSV
         run: |
-          ~/bin/snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_FILE_FORMATS_CSV_2.0.0.sql -o friendly=false
+          snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_FILE_FORMATS_CSV_2.0.0.sql -o friendly=false -o log_level=DEBUG
 
       - name: Deploy Stored Procedure Load Grouped JSON
         run: |
-          ~/bin/snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_SP_LOAD_GROUPED_JSON.sql -o friendly=false
+          snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_SP_LOAD_GROUPED_JSON.sql -o friendly=false -o log_level=DEBUG
 
       - name: Deploy Stored Procedure Bulk Load
         run: |
-          ~/bin/snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_BULK_LOAD_SP.sql -o friendly=false
+          snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_BULK_LOAD_SP.sql -o friendly=false -o log_level=DEBUG
 
       - name: Deploy Stored Procedure Create Bronze
         run: |
-          ~/bin/snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_CREATE_BRONZE_SP.sql -o friendly=false
+          snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_CREATE_BRONZE_SP.sql -o friendly=false -o log_level=DEBUG
 
       - name: Deploy Task Create Bronze
         run: |
-          ~/bin/snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_CREATE_BRONZE_TASK.sql -o friendly=false
+          snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_CREATE_BRONZE_TASK.sql -o friendly=false -o log_level=DEBUG
 
       - name: Deploy Task Bulk Load
         run: |
-          ~/bin/snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_BULK_LOAD_TASK.sql -o friendly=false
+          snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_BULK_LOAD_TASK.sql -o friendly=false -o log_level=DEBUG
 
       - name: Deploy Stream on Stage
         run: |
-          ~/bin/snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_STREAM_ON_STAGE.sql -o friendly=false
+          snowsql -f dev_poc_sap/POC_SAP_LANDING/DEV_STREAM_ON_STAGE.sql -o friendly=false -o log_level=DEBUG

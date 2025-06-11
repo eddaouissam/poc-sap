@@ -10,7 +10,7 @@ on:
 
 jobs:
   setup_snowflake:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04  # Using Ubuntu 20.04 for better compatibility
 
     env:
       SNOWSQL_PWD: ${{ secrets.SNOWFLAKE_PASSWORD }}
@@ -25,17 +25,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install libssl1.1 manually
-        run: |
-          wget http://old-releases.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
-          sudo dpkg -i libssl1.1_1.1.1f-1ubuntu2.16_amd64.deb
-
       - name: Install SnowSQL
         run: |
-          curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
-          SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
+          mkdir -p ~/bin
+          curl -O "https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.28-linux_x86_64.bash"
+          bash snowsql-1.2.28-linux_x86_64.bash -f
+          echo "${HOME}/bin" >> $GITHUB_PATH
 
       - name: Execute Snowflake Setup Script
         run: |
           echo "Executing Snowflake Setup Script"
-          ~/bin/snowsql -f poc_setup/DEV_SNOWFLAKE_SETUP.SQL -o friendly=false
+          snowsql -f poc_setup/DEV_SNOWFLAKE_SETUP.SQL -o friendly=false -o log_level=DEBUG

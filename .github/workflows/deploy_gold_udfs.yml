@@ -11,7 +11,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     env:
       SNOWSQL_PWD: ${{ secrets.SNOWFLAKE_PASSWORD }}
@@ -30,8 +30,12 @@ jobs:
 
       - name: Install SnowSQL
         run: |
-          curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
-          SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
+          mkdir -p ~/bin
+          curl -O "https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.28-linux_x86_64.bash"
+          export SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile
+          bash snowsql-1.2.28-linux_x86_64.bash
+          echo "${HOME}/bin" >> $GITHUB_PATH
+          chmod +x ~/bin/snowsql
           
       - name: Deploy all UDF SQL files to Snowflake
         run: |
@@ -42,7 +46,6 @@ jobs:
           fi
           for sql_file in $sql_files; do
             echo "Processing $sql_file"
-            SQL_QUERY=$(cat "$sql_file")
-            echo "Executing query from $sql_file"
-            ~/bin/snowsql -q "${SQL_QUERY};" -o friendly=false
+            echo "Executing $sql_file"
+            snowsql -f "$sql_file" -o friendly=false -o log_level=DEBUG
           done

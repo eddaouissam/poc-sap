@@ -20,7 +20,7 @@ use warehouse DEV_WH;
 CREATE OR REPLACE PROCEDURE BULK_LOAD_SP()
 RETURNS VARCHAR(16777216)
 LANGUAGE PYTHON
-RUNTIME_VERSION = '3.8'
+RUNTIME_VERSION = '3.9'
 PACKAGES = ('snowflake-snowpark-python')
 IMPORTS=('@git_repo_stage/branches/main/dev_poc_sap/POC_SAP_LANDING/DEV_BULK_LOAD_CSV_TO_TABLES.py')
 HANDLER = 'DEV_BULK_LOAD_CSV_TO_TABLES.load_data_automated';

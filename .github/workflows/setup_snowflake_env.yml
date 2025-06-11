@@ -10,7 +10,7 @@ on:
 
 jobs:
   setup_snowflake:
-    runs-on: ubuntu-20.04  # Using Ubuntu 20.04 for better compatibility
+    runs-on: ubuntu-22.04  # Updated to Ubuntu 22.04
 
     env:
       SNOWSQL_PWD: ${{ secrets.SNOWFLAKE_PASSWORD }}
@@ -25,14 +25,23 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Set up OpenSSL compatibility
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openssl
+
       - name: Install SnowSQL
         run: |
           mkdir -p ~/bin
-          curl -O "https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.28-linux_x86_64.bash"
-          bash snowsql-1.2.28-linux_x86_64.bash -f
+          # Download and verify latest SnowSQL
+          SNOWSQL_VERSION=$(curl -s https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/index.json | jq -r '.version')
+          curl -O "https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-${SNOWSQL_VERSION}-linux_x86_64.bash"
+          export SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile
+          bash snowsql-${SNOWSQL_VERSION}-linux_x86_64.bash
           echo "${HOME}/bin" >> $GITHUB_PATH
 
       - name: Execute Snowflake Setup Script
         run: |
           echo "Executing Snowflake Setup Script"
+          export LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:$LD_LIBRARY_PATH
           snowsql -f poc_setup/DEV_SNOWFLAKE_SETUP.SQL -o friendly=false -o log_level=DEBUG

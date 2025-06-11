@@ -10,8 +10,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy_sap_raw_landing:
-    runs-on: ubuntu-latest
+  deploy_sap_bronze:    # Updated job name to match its purpose
+    runs-on: ubuntu-22.04    # Updated to newer Ubuntu version
 
     env:
       SNOWSQL_PWD: ${{ secrets.SNOWFLAKE_PASSWORD }}
@@ -28,21 +28,25 @@ jobs:
 
       - name: Install SnowSQL
         run: |
-          curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.9-linux_x86_64.bash
-          SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.2.9-linux_x86_64.bash
+          mkdir -p ~/bin
+          curl -O "https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.2/linux_x86_64/snowsql-1.2.28-linux_x86_64.bash"
+          export SNOWSQL_DEST=~/bin SNOWSQL_LOGIN_SHELL=~/.profile
+          bash snowsql-1.2.28-linux_x86_64.bash
+          echo "${HOME}/bin" >> $GITHUB_PATH
+          chmod +x ~/bin/snowsql
 
       - name: Deploy Stored Procedure To Create Silver Structure
         run: |
-          ~/bin/snowsql -f dev_poc_sap/POC_SAP_BRONZE/DEV_CREATE_SILVER_SP.sql -o friendly=false
+          snowsql -f dev_poc_sap/POC_SAP_BRONZE/DEV_CREATE_SILVER_SP.sql -o friendly=false -o log_level=DEBUG
 
       - name: Deploy Stored Procedure for the Automated MERGE
         run: |
-          ~/bin/snowsql -f dev_poc_sap/POC_SAP_BRONZE/DEV_SAP_MERGE_SP.sql -o friendly=false
+          snowsql -f dev_poc_sap/POC_SAP_BRONZE/DEV_SAP_MERGE_SP.sql -o friendly=false -o log_level=DEBUG
 
       - name: Deploy Stored Procedure for the BRONZE TO SILVER Transformation
         run: |
-          ~/bin/snowsql -f dev_poc_sap/POC_SAP_BRONZE/DEV_TRANSFORM_BRONZE_TO_SILVER_SP.sql -o friendly=false
+          snowsql -f dev_poc_sap/POC_SAP_BRONZE/DEV_TRANSFORM_BRONZE_TO_SILVER_SP.sql -o friendly=false -o log_level=DEBUG
 
       - name: Deploy Task for Bronze To Silver Orchestrated
         run: |
-          ~/bin/snowsql -f dev_poc_sap/POC_SAP_BRONZE/DEV_BRONZE_TO_SILVER_TASK.sql -o friendly=false
+          snowsql -f dev_poc_sap/POC_SAP_BRONZE/DEV_BRONZE_TO_SILVER_TASK.sql -o friendly=false -o log_level=DEBUG

@@ -6,7 +6,7 @@ This folder contains the scripts that handle the process of transforming data fr
 
 The following illustration provides a high-level overview of the steps involved:
 
-![Transformation Process](../../images/BRONZE_TO_SILVER.png)
+![Transformation Process](../../docs/images/BRONZE_TO_SILVER.png)
 
 ## Contents
 

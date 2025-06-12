@@ -20,7 +20,7 @@ The architecture of the framework is built around Snowflake's powerful cloud dat
 2. **Silver Layer**: Data transformation and cleansing using an automated MERGE Query to prepare for analytics. See dev_poc_sap/POC_SAP_BRONZE/README.MD for more info's
 3. **Gold Layer**: Aggregated and summarized data optimized for business intelligence.
 
-![Architecture Diagram](images/architecture.png)
+![Architecture Diagram](docs/images/architecture.png)
 
 ## Getting Started
 To get started with the SAP Data Acceleration Framework, follow these setup instructions. This will guide you through obtaining and configuring the necessary components to begin developing and testing within your own environment.

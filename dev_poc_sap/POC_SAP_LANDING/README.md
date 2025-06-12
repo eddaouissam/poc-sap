@@ -6,7 +6,7 @@ This folder contains the scripts that handle the process of bulk loading data fr
 
 The following illustration provides a high-level overview of the steps involved:
 
-![Bulk Loading Process](../../images/LANDING_TO_BRONZE.png)
+![Bulk Loading Process](../../docs/images/LANDING_TO_BRONZE.png)
 
 ## Contents
 

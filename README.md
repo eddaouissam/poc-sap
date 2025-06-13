@@ -1,4 +1,4 @@
-# SAP Data Acceleration Framework for Snowflake
+# SAP Data Acceleration Framework for Snowflake - @CCELERATOR4SAP
 
 ## Introduction
 The SAP Data Acceleration Framework with Snowflake ❄️ is designed to accelerate the time to value of SAP data by efficiently integrating it into Snowflake. This framework facilitates the seamless migration and transformation of SAP data, making it readily accessible for advanced analytics and BI activities. By leveraging a Medallion architecture, this proof of concept (POC) not only enhances the speed but also the flexibility of data handling, catering to diverse analytical needs.

@@ -33,7 +33,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   dbt_silver_to_gold:
     # Config indicated by + and applies to all files under models/example/
-    staging:
+    erd_asap_gold:
       +transient: false
       +schema: SAP_GOLD
       +materialized: table

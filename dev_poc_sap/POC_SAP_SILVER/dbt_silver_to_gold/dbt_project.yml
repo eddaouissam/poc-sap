@@ -38,4 +38,4 @@ models:
       +schema: SAP_GOLD
       +materialized: table
       +tags:
-        - "staging"
+        - "erd_asap_gold"

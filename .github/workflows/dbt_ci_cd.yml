@@ -58,12 +58,12 @@ jobs:
 
       - name: Run dbt debug
         run: dbt debug
-        working-directory: dev_poc_sap/POC_SAP_SILVER/poc_sap
+        working-directory: dev_poc_sap/POC_SAP_SILVER/dbt_silver_to_gold
 
       - name: Run dbt deps
         run: dbt deps
-        working-directory: dev_poc_sap/POC_SAP_SILVER/poc_sap
+        working-directory: dev_poc_sap/POC_SAP_SILVER/dbt_silver_to_gold
 
       - name: Run dbt run
         run: dbt run
-        working-directory: dev_poc_sap/POC_SAP_SILVER/poc_sap
+        working-directory: dev_poc_sap/POC_SAP_SILVER/dbt_silver_to_gold

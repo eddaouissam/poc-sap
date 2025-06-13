@@ -1,0 +1,5 @@
+SELECT DISTINCT
+    tcurx.CURRKEY,
+    CAST(POWER(10, 2 - COALESCE(tcurx.CURRDEC, 0)) AS NUMERIC) AS CURRFIX
+  FROM
+    DEV_DB_VISEO.sap_silver.s_tcurx AS tcurx

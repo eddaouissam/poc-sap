@@ -1,86 +1,40 @@
---The granularity of this query is Client,Company,ChartOfAccounts,HierarchyName,BusinessArea,
---ProfitCenter,CostCenter,LedgerInGeneralLedgerAccounting,FiscalYear,FiscalPeriod,Hierarchy Node,
---Language,TargetCurrency.
+-- The granularity of this query is:
+-- Client, Company, ChartOfAccounts, HierarchyName, BusinessArea,
+-- ProfitCenter, CostCenter, LedgerInGeneralLedgerAccounting, FiscalYear,
+-- FiscalPeriod, Hierarchy Node, Language, TargetCurrency.
+
 WITH
   LanguageKey AS (
     SELECT
-      LanguageKey_SPRAS
+      NULL AS LanguageKey_SPRAS
     FROM
-      `{{ project_id_tgt }}.{{ dataset_reporting_tgt }}.Languages_T002`
-    WHERE LanguageKey_SPRAS IN UNNEST({{ sap_languages }})
+      (SELECT 1 AS dummy_column WHERE 1 = 0) -- Simulates an empty table
   ),
 
   CurrencyConversion AS (
     SELECT
-      Companies.Client_MANDT,
-      MAX(Companies.FiscalYearVariant_PERIV) AS periv,
-      Companies.CompanyCode_BUKRS,
-      FiscalDateDimension.FiscalYear,
-      FiscalDateDimension.FiscalPeriod,
-      Currency.FromCurrency_FCURR,
-      Currency.ToCurrency_TCURR,
-      MAX_BY(Currency.ExchangeRate_UKURS, FiscalDateDimension.Date) AS ExchangeRate,
-      MAX(Currency.ExchangeRate_UKURS) AS MaxExchangeRate,
-      AVG(Currency.ExchangeRate_UKURS) AS AvgExchangeRate
+      NULL AS Client_MANDT,
+      NULL AS periv,
+      NULL AS CompanyCode_BUKRS,
+      NULL AS FiscalYear,
+      NULL AS FiscalPeriod,
+      NULL AS FromCurrency_FCURR,
+      NULL AS ToCurrency_TCURR,
+      NULL AS ExchangeRate,
+      NULL AS MaxExchangeRate,
+      NULL AS AvgExchangeRate
     FROM
-      `{{ project_id_tgt }}.{{ dataset_reporting_tgt }}.fiscal_date_dim` AS FiscalDateDimension
-    INNER JOIN
-      `{{ project_id_tgt }}.{{ dataset_reporting_tgt }}.CompaniesMD` AS Companies
-      ON
-        Companies.Client_MANDT = FiscalDateDimension.MANDT
-        AND Companies.FiscalYearVariant_PERIV = FiscalDateDimension.periv
-        AND FiscalDateDimension.Date <= CURRENT_DATE()
-    INNER JOIN
-      `{{ project_id_tgt }}.{{ dataset_reporting_tgt }}.CurrencyConversion` AS Currency
-      ON
-        FiscalDateDimension.MANDT = Currency.Client_MANDT
-        AND FiscalDateDimension.Date = Currency.ConvDate
-        AND Companies.CurrencyCode_WAERS = Currency.FromCurrency_FCURR
-    WHERE
-      Currency.Client_MANDT = '{{ mandt }}'
-      AND Currency.ToCurrency_TCURR IN UNNEST({{ sap_currencies }})
-      --## CORTEX-CUSTOMER Modify the exchange rate type based on your requirement
-      AND Currency.ExchangeRateType_KURST = 'M'
-    GROUP BY
-      Companies.Client_MANDT,
-      Companies.CompanyCode_BUKRS,
-      FiscalDateDimension.FiscalYear,
-      FiscalDateDimension.FiscalPeriod,
-      Currency.FromCurrency_FCURR,
-      Currency.ToCurrency_TCURR
+      (SELECT 1 AS dummy_column WHERE 1 = 0) -- Simulates an empty table
   ),
 
   ParentId AS (
     SELECT
-      fsv_parent.Client,
-      fsv_parent.CompanyCode,
-      fsv_parent.Parent,
-      fsv_child.FinancialStatementItem
+      NULL AS Client,
+      NULL AS CompanyCode,
+      NULL AS Parent,
+      NULL AS FinancialStatementItem
     FROM
-      (
-        SELECT DISTINCT
-          Client,
-          CompanyCode,
-          Parent
-        FROM `{{ project_id_tgt }}.{{ dataset_reporting_tgt }}.FinancialStatement`
-        -- PLAccountIndicator = 'X'represents GLAccount for Profit & Loss
-        WHERE PLAccountIndicator = 'X'
-      ) AS fsv_parent
-    INNER JOIN -- noqa: disable=L042
-      (
-        SELECT DISTINCT
-          Client,
-          CompanyCode,
-          Node,
-          FinancialStatementItem
-        FROM `{{ project_id_tgt }}.{{ dataset_reporting_tgt }}.FinancialStatement`
-        -- PLAccountIndicator = 'X'represents GLAccount for Profit & Loss
-        WHERE PLAccountIndicator = 'X'
-      ) AS fsv_child -- noqa: enable=all
-      ON
-        fsv_parent.Client = fsv_child.Client
-        AND fsv_parent.Parent = fsv_child.Node
-        AND fsv_parent.CompanyCode = fsv_child.CompanyCode
+      (SELECT 1 AS dummy_column WHERE 1 = 0) -- Simulates an empty table
   )
 
 SELECT
@@ -98,69 +52,45 @@ SELECT
   LanguageKey.LanguageKey_SPRAS,
   FSV.Parent AS GLParent,
   FSV.FinancialStatementItem AS GLFinancialItem,
-  --The following text columns are language dependent.
-  COALESCE(GLNodeText.FinancialStatementItemText_TXT45, GLText.GlAccountLongText_TXT50) AS GLNodeText,
-  --For parent as root node, hierarchy name is printed as parent text.
-  IF(FSV.Level = '02', FSV.HierarchyName, GLParentText.FinancialStatementItemText_TXT45) AS GLParentText,
+  NULL AS GLNodeText,
+  NULL AS GLParentText,
   FSV.Level AS GLLevel,
   FSV.FiscalQuarter AS FiscalQuarter,
   FSV.IsLeafNode AS GLIsLeafNode,
-  --The following text column is language independent.
   FSV.CompanyText AS CompanyText,
   FSV.AmountInLocalCurrency AS AmountInLocalCurrency,
-  SUM(FSV.AmountInLocalCurrency)
-    OVER ( -- noqa: disable=L003
-      PARTITION BY
-        FSV.Client, FSV.CompanyCode, FSV.BusinessArea,
-        FSV.LedgerInGeneralLedgerAccounting, FSV.ProfitCenter, FSV.CostCenter,
-        FSV.Node, LanguageKey.LanguageKey_SPRAS, CurrencyConversion.ToCurrency_TCURR
-      ORDER BY
-        FSV.FiscalYear ASC, FSV.FiscalPeriod ASC
-      ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
-  ) AS CumulativeAmountInLocalCurrency,
+  NULL AS CumulativeAmountInLocalCurrency,
   FSV.CurrencyKey AS CurrencyKey,
-  -- The following columns are having amount/prices in target currency.
   CurrencyConversion.ExchangeRate AS ExchangeRate,
   CurrencyConversion.MaxExchangeRate AS MaxExchangeRate,
   CurrencyConversion.AvgExchangeRate AS AvgExchangeRate,
-  (FSV.AmountInLocalCurrency * CurrencyConversion.ExchangeRate) AS AmountInTargetCurrency,
-  SUM(FSV.AmountInLocalCurrency * CurrencyConversion.ExchangeRate)
-    OVER (
-      PARTITION BY
-        FSV.Client, FSV.CompanyCode, FSV.BusinessArea,
-        FSV.LedgerInGeneralLedgerAccounting, FSV.Node, FSV.ProfitCenter, FSV.CostCenter,
-        LanguageKey.LanguageKey_SPRAS, CurrencyConversion.ToCurrency_TCURR
-      ORDER BY
-        FSV.FiscalYear ASC, FSV.FiscalPeriod ASC
-      ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
-    ) AS CumulativeAmountInTargetCurrency, --noqa: enable=all
+  NULL AS AmountInTargetCurrency,
+  NULL AS CumulativeAmountInTargetCurrency,
   CurrencyConversion.ToCurrency_TCURR AS TargetCurrency_TCURR
-
 FROM
   (
     SELECT
-      Client,
-      CompanyCode,
-      FiscalYear,
-      FiscalPeriod,
-      FiscalQuarter,
-      ChartOfAccounts,
-      HierarchyName,
-      BusinessArea,
-      LedgerInGeneralLedgerAccounting,
-      ProfitCenter,
-      CostCenter,
-      Node,
-      Parent,
-      FinancialStatementItem,
-      Level,
-      IsLeafNode,
-      CompanyText,
-      AmountInLocalCurrency,
-      CurrencyKey
-    FROM `{{ project_id_tgt }}.{{ dataset_reporting_tgt }}.FinancialStatement`
-    -- PLAccountIndicator = 'X'represents GLAccount for Profit & Loss
-    WHERE PLAccountIndicator = 'X'
+      NULL AS Client,
+      NULL AS CompanyCode,
+      NULL AS FiscalYear,
+      NULL AS FiscalPeriod,
+      NULL AS FiscalQuarter,
+      NULL AS ChartOfAccounts,
+      NULL AS HierarchyName,
+      NULL AS BusinessArea,
+      NULL AS LedgerInGeneralLedgerAccounting,
+      NULL AS ProfitCenter,
+      NULL AS CostCenter,
+      NULL AS Node,
+      NULL AS Parent,
+      NULL AS FinancialStatementItem,
+      NULL AS Level,
+      NULL AS IsLeafNode,
+      NULL AS CompanyText,
+      NULL AS AmountInLocalCurrency,
+      NULL AS CurrencyKey
+    FROM
+      (SELECT 1 AS dummy_column WHERE 1 = 0) -- Simulates an empty table
   ) AS FSV
 
 LEFT JOIN ParentId
@@ -176,29 +106,3 @@ LEFT JOIN CurrencyConversion
     AND FSV.FiscalYear = CurrencyConversion.FiscalYear
     AND FSV.FiscalPeriod = CurrencyConversion.FiscalPeriod
 CROSS JOIN LanguageKey
-{# LEFT JOIN
-  {{ ref("FSVTextsMD") }} AS GLNodeText
-  ON
-    FSV.Client = GLNodeText.Client_MANDT
-    AND FSV.HierarchyName = GLNodeText.FinancialStatementVersion_VERSN
-    AND FSV.FinancialStatementItem = GLNodeText.FinancialStatementItem_ERGSL
-    AND GLNodeText.LanguageKey_SPRAS = LanguageKey.LanguageKey_SPRAS
-    -- TextType_TXTYP = 'K' represents text for the node
-    AND GLNodeText.TextType_TXTYP = 'K' #}
-LEFT JOIN
-  {{ ref("GLAccountsMD") }} AS GLText
-  ON
-    FSV.Client = GLText.Client_MANDT
-    AND FSV.ChartOfAccounts = GLText.ChartOfAccounts_KTOPL
-    AND FSV.FinancialStatementItem = GLText.GlAccountNumber_SAKNR
-    AND GLText.Language_SPRAS = LanguageKey.LanguageKey_SPRAS
-    {# not yet in our data sources :) #}
-{# LEFT JOIN
-  {{ ref("FSVTextsMD") }} AS GLParentText
-  ON
-    FSV.Client = GLParentText.Client_MANDT
-    AND FSV.HierarchyName = GLParentText.FinancialStatementVersion_VERSN
-    AND ParentId.FinancialStatementItem = GLParentText.FinancialStatementItem_ERGSL
-    AND GLParentText.LanguageKey_SPRAS = LanguageKey.LanguageKey_SPRAS
-    -- TextType_TXTYP = 'K' represents text for the node
-    AND GLParentText.TextType_TXTYP = 'K' #}

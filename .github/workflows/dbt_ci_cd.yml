@@ -8,7 +8,7 @@ on:
       - main
     paths:
       - '.github/workflows/dbt_ci_cd.yml'
-      - 'dev_poc_sap/POC_SAP_SILVER/poc_sap/**'
+      - 'dev_poc_sap/POC_SAP_SILVER/dbt_silver_to_gold/**'
   workflow_dispatch:
 jobs:
   deploy:
@@ -33,7 +33,7 @@ jobs:
         run: |
           mkdir -p ~/.dbt
           echo "
-          poc_sap:
+          dbt_silver_to_gold:
             outputs:
               dev:
                 account: $SNOWFLAKE_ACCOUNT
